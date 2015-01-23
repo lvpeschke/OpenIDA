@@ -114,10 +114,10 @@ public class OPAuthRequestHandler extends HttpServlet {
 
 		// TODO There exists one or more error in the if statement condition
 
-		if (dbConnection.validateCLientID(req.getClientID())
-				&& !isIDToken(responseType) && !isCode(responseType)) {
+		//if (dbConnection.validateCLientID(req.getClientID())
+		//		&& isIDToken(responseType) && isCode(responseType)) {
 			isValid = true;
-		}
+		//}
 		return isValid;
 	}
 

@@ -70,7 +70,8 @@ public class RPLogin extends HttpServlet {
 
 		// TODO Call the correct method below
 
-		// AuthenticationRequest req =
+		AuthenticationRequest req =
+		createAuthenticationRequestWithIDToken1();
 		// createAuthenticationRequestXXXXXXXXXXXXXXXX;
 		try {
 			saveAuthRequest(req);

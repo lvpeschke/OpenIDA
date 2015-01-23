@@ -1,6 +1,6 @@
-/dbPackage/
-/filters/
-/openidProviderPackage/
-/relyingPartypackage/
-/serverPackage/
-/webSocketPackage/
+/dbPackage
+/filters
+/openidProviderPackage
+/relyingPartypackage
+/serverPackage
+/webSocketPackage

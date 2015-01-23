@@ -1,0 +1,15 @@
+body { 
+    background-color: #980000; 
+}
+.contentDiv{
+	background-color: gray;
+	min-height: 300px;
+	border: 1px solid black;
+	padding: 4px;
+}
+.LoginInput{
+	float: right;
+}
+.LoginLabels{
+	float: left;
+}

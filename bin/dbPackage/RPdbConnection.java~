@@ -19,19 +19,9 @@ public class RPdbConnection {
 	private static RPdbConnection instance;
 
 	// ------------- Change these ones
-	// Replace the text within brackets (including the brackets themselves)
-	// with your LiU ID and MySQL password, as shown below.
-	// 
-	// If you have previously taken an IDA course where you used a MySQL databse,
-	// that database account is still valid. Otherwise you should have received
-	// an e-mail with the password for your newly created database account.
-	// If you don't have a database account at IDA, please contact your lab
-	// assistant.
-	// If you have forgotten your database password, you can get a new one here:
-	// https://www.ida.liu.se/local/students/mysql/passwd.en.shtml
-	private String url = "jdbc:mysql://db-und.ida.liu.se/[lenpe782]";
-	private String user = "[lenpe782]"; // LiU ID
-	private String password = "[lenpe7822058]"; // MySQL password
+	private String url = "jdbc:mysql://XXXXXXXXXXX/XXXXXXXXXX";
+	private String user = "XXXXXXXXX";
+	private String password = "XXXXXXXX";
 	// -------------
 	private static final String DRIVER_CLASS = "com.mysql.jdbc.Driver";
 	private static final String constOPURI = "OPURI";

@@ -68,11 +68,14 @@ public class RPLogin extends HttpServlet {
 		createURIS();
 		generateOneTimers();
 
-		// TODO Call the correct method below
+		// We create a request with a token response because we use implicit flow.
+		// In this scenario, the tokens are returned directly to the client,
+		// who does not need to invoke the token endpoint.
+		// NB: the program also works with a code instead of a token.
+		// In any case, the scope needs to be "openid".
 
 		AuthenticationRequest req =
-		createAuthenticationRequestWithIDTokenAndCode1();
-		// createAuthenticationRequestXXXXXXXXXXXXXXXX;
+				createAuthenticationRequestWithIDToken1();
 		try {
 			saveAuthRequest(req);
 			saveNonceInSession(request, req);

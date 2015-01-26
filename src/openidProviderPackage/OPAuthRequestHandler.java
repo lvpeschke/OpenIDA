@@ -112,10 +112,10 @@ public class OPAuthRequestHandler extends HttpServlet {
 		boolean isValid = false;
 		String responseType = req.getResponseType().toString();
 
-		// TODO There exists one or more error in the if statement condition
+		// We make sure the response type is token and not code (implicit flow).
 
 		if (dbConnection.validateCLientID(req.getClientID())
-				&& isIDToken(responseType) && isCode(responseType)) {
+				&& isIDToken(responseType) && !isCode(responseType)) {
 			isValid = true;
 		}
 		return isValid;

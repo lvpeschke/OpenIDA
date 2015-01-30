@@ -81,20 +81,20 @@ version 1, 15-01-27
 % -> combination of matrix positions, colours, (letters?)
 % how it works
 
-The authentication is based on a choice of matrix positions, colours, letters and password made at the registration.
+The authentication is based on a choice of matrix positions, colours and password made at the registration.
 This choice decides the answer of the challenges that are sent by the server to the user.
 
 More concretely, the challenge consists of a randomly generated matrix 3x3 in which the 9 positions may contains a
 different letter of color. The answer the user has to provide is the letters that fit his choices by either being in the
-right position in the matrix, of the right color, or simply a chosen letter.
+right position in the matrix, of the right color, or simply a letter contained in the password.
 
 If no letters fit at least one of the chosen characteristics then the password has to be entered.
 
-The parameters we chose are:
+The parameters among which the user have to choose are :
 \begin{itemize}
 \item 3 to 7 matrix positions
-\item 2 or more colours among 6
-\item 2 letters among the 26 capital letters
+\item 2 to 4 colours among 6
+\item a password of maximum 12 letters but with at least 4 different letters. Without considering the case.
 \end{itemize}
 
 \paragraph{Risk analysis}

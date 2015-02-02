@@ -26,17 +26,23 @@ public class OPdbConnection {
 	// ------------- Change these ones
 	// Replace the text within brackets (including the brackets themselves)
 	// with your LiU ID and MySQL password, as shown below.
-	// 
-	// If you have previously taken an IDA course where you used a MySQL databse,
+	//
+	// If you have previously taken an IDA course where you used a MySQL
+	// databse,
 	// that database account is still valid. Otherwise you should have received
 	// an e-mail with the password for your newly created database account.
 	// If you don't have a database account at IDA, please contact your lab
 	// assistant.
 	// If you have forgotten your database password, you can get a new one here:
 	// https://www.ida.liu.se/local/students/mysql/passwd.en.shtml
-	private String url = "jdbc:mysql://db-und.ida.liu.se/guila302";
-	private String user = "guila302"; // LiU ID
-	private String password = "guila3028057"; // MySQL password
+	// private String url = "jdbc:mysql://db-und.ida.liu.se/guila302";
+	// private String user = "guila302"; // LiU ID
+	// private String password = "guila3028057"; // MySQL password
+
+	// database on my laptop
+	private String url = "jdbc:mysql://localhost:3306/openida";
+	private String user = "root"; // LiU ID
+	private String password = ""; // MySQL password
 	// -------------
 	private static final String DRIVER_CLASS = "com.mysql.jdbc.Driver";
 	private static final String constRedirectURI = "redirect_uri";
@@ -588,7 +594,7 @@ public class OPdbConnection {
 			// database, could be done to make sure the database is not filled
 			// with unessary amount of data
 
-			// clearDatabase();
+			clearDatabase();
 			createAuthenticationtable();
 			createClientIdTable();
 			createUserTable();
@@ -618,7 +624,7 @@ public class OPdbConnection {
 	 * @return
 	 */
 	public static synchronized OPdbConnection getConnection() {
-		if (instance == null){
+		if (instance == null) {
 			createClass();
 		}
 		return instance;

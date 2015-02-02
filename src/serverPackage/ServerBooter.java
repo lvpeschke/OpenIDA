@@ -1,20 +1,21 @@
 package serverPackage;
 
 import java.io.IOException;
-import java.util.EnumSet;
 
-import javax.servlet.DispatcherType;
-
-import relyingPartypackage.*;
-import webSocketPackage.Chatroom;
-import webSocketPackage.ChatroomSocket;
-import openidProviderPackage.*;
+import openidProviderPackage.OPAuthRequestHandler;
+import openidProviderPackage.OPChallengeGenerator;
+import openidProviderPackage.OPCreateUserHandler;
+import openidProviderPackage.OPDataProvider;
+import openidProviderPackage.OPGetUserPicHandler;
+import openidProviderPackage.OPLogOut;
+import openidProviderPackage.OPLoginHandler;
+import openidProviderPackage.OPRespondAuthentication;
+import openidProviderPackage.OPSetUserPicture;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
-import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -24,9 +25,10 @@ import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
-import dbPackage.OPdbConnection;
-import dbPackage.RPdbConnection;
-import filters.AuthenticatedFilter;
+import relyingPartypackage.RPAuthRespHandler;
+import relyingPartypackage.RPLogin;
+import webSocketPackage.Chatroom;
+import webSocketPackage.ChatroomSocket;
 
 /**
  * Main class for starting and setting up the server for both the relying party
@@ -63,8 +65,8 @@ public class ServerBooter {
 	 */
 	public void startServer() {
 		server = new Server(port);
-		//OPdbConnection.createClass();
-		//RPdbConnection.createClass();
+		// OPdbConnection.createClass();
+		// RPdbConnection.createClass();
 
 		WebAppContext contextFilter = generateResourcesAndFilters();
 
@@ -74,8 +76,7 @@ public class ServerBooter {
 		ContextHandler wsocketHandler = setupWebSocket();
 
 		HandlerList handlers = new HandlerList();
-		handlers.setHandlers(new Handler[] { wsocketHandler, context,
-				contextFilter });
+		handlers.setHandlers(new Handler[] { wsocketHandler, context, contextFilter });
 
 		server.setHandler(handlers);
 
@@ -101,8 +102,7 @@ public class ServerBooter {
 			@Override
 			public void configure(WebSocketServletFactory factory) {
 				factory.setCreator(new WebSocketCreator() {
-					public Object createWebSocket(UpgradeRequest req,
-							UpgradeResponse resp) {
+					public Object createWebSocket(UpgradeRequest req, UpgradeResponse resp) {
 						String query = req.getRequestURI().toString();
 						if ((query == null) || (query.length() <= 0)) {
 							try {
@@ -147,26 +147,21 @@ public class ServerBooter {
 	 */
 	private ServletContextHandler generateRESTApi() {
 
-		ServletContextHandler context = new ServletContextHandler(
-				ServletContextHandler.SESSIONS);
+		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
-		context.addServlet(new ServletHolder(new RPLogin()),
-				"/RelyingParty/Login/*");
+		context.addServlet(new ServletHolder(new RPLogin()), "/RelyingParty/Login/*");
 
-		context.addServlet(new ServletHolder(new RPAuthRespHandler()),
-				"/RelyingParty/callback/*");
+		context.addServlet(new ServletHolder(new RPAuthRespHandler()), "/RelyingParty/callback/*");
 
 		context.addServlet(new ServletHolder(new OPAuthRequestHandler()),
 				"/OpenIdProvider/AuthenticationRequest/*");
 
-		context.addServlet(new ServletHolder(new OPLoginHandler()),
-				"/OpenIdProvider/OpLogin/*");
+		context.addServlet(new ServletHolder(new OPLoginHandler()), "/OpenIdProvider/OpLogin/*");
 
 		context.addServlet(new ServletHolder(new OPCreateUserHandler()),
 				"/OpenIdProvider/OpCreateUser/*");
 
-		context.addServlet(new ServletHolder(new OPSetUserPicture()),
-				"/OpenIdProvider/OPSetPic/*");
+		context.addServlet(new ServletHolder(new OPSetUserPicture()), "/OpenIdProvider/OPSetPic/*");
 
 		context.addServlet(new ServletHolder(new OPGetUserPicHandler()),
 				"/OpenIdProvider/OPGetPic/*");
@@ -177,8 +172,10 @@ public class ServerBooter {
 		context.addServlet(new ServletHolder(new OPRespondAuthentication()),
 				"/OpenIdProvider/OPSubmitAuthorization/*");
 
-		context.addServlet(new ServletHolder(new OPLogOut()),
-				"/OpenIdProvider/OPLogOut/*");
+		context.addServlet(new ServletHolder(new OPLogOut()), "/OpenIdProvider/OPLogOut/*");
+
+		context.addServlet(new ServletHolder(new OPChallengeGenerator()),
+				"/OpenIdProvider/challenge/*");
 
 		return context;
 	}

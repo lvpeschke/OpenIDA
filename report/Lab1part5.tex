@@ -111,9 +111,28 @@ The parameters among which the user have to choose are :
 % how to implement
 
 \paragraph{Database}
+The user table needs to be changed in the database. A column that contains the selected matrix positions and another
+one for the selected colors need to be added.
+
 \paragraph{User interface}
+The user interface need to have another pages to autenticate. The current authentication page won't have a password
+field and when the username will be submit, another page with the challenge and an answer field would appear. Once the
+answer of the challenge is entered correctly, the current user page will appear and the application will continue as it
+is now.
+
 \paragraph{HTML and CSS}
+First of all, on remove the password field from the current loggin page.
+
+After that, another HTML page is needed. A copy of the logIn.html with small modifications will suffice. Only
+instructions for the challenge need to be added with, of course, the challenge image will replace the current username
+field.
+
+Finally, maybe a little CSS will be added for the instructions text and the challenge image.
+
 \paragraph{Servlets}
+A new servlet will be added to generate the challenge image. It will generate the challenge and then use the id of the user in the url as input for
+calculating the answer and stock it as the next expected answer in the user.
+
 \paragraph{OpenIDA}
 
 \end{document}

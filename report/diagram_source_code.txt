@@ -1,0 +1,14 @@
+https://www.websequencediagrams.com/
+
+title Authentication Sequence Diagram
+
+User->+Chat App: Login Request
+Chat App-->-User: Redirection
+User->+Server: Login Request
+Server-->-User: Challenge
+User->+Server: Response
+Server-->-User: Validation
+User->Chat App: Access
+
+http://www.yuml.me/diagram/usecase/draw
+[User]-(Create account), (Create account)>(Choose colours), (Create account)>(Choose matrix cells), (Create account)>(Choose password), [User]-(Log in), (Log in)>(Respond to challenge)

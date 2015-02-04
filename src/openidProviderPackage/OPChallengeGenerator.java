@@ -2,12 +2,17 @@ package openidProviderPackage;
 
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import openidProviderPackage.challenge.Challenge;
+import openidProviderPackage.challenge.ChallengeResolver;
+import openidProviderPackage.challenge.Drawer;
 import dbPackage.OPdbConnection;
+import dbPackage.User;
 
 /**
  * This class generate the challenge for the authentication
@@ -17,25 +22,38 @@ public class OPChallengeGenerator extends HttpServlet {
 
 	private OPdbConnection dbConnection;
 
+	private Drawer drawer;
+
+	private ChallengeResolver challengeResolver;
+
 	/**
 	 * Create a connection to the database
 	 */
 	@Override
 	public void init() {
 		dbConnection = OPdbConnection.getConnection();
+		drawer = new Drawer();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		generateChallenge();
+
+		Challenge c = new Challenge();
+
+		String username = request.getPathInfo();
+		putExpectedAnswerIntoDB(c, username);
+
+		setResponse(response, c);
 	}
 
-	private void generateChallenge() {
-
+	private void setResponse(HttpServletResponse response, Challenge c) throws IOException {
+		response.setContentType("image/jpeg");
+		ImageIO.write(drawer.drawChallengeImage(c), "jpg", response.getOutputStream());
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	private void putExpectedAnswerIntoDB(Challenge c, String username) {
+		User user = dbConnection.getUserInfo(username);
+		String answer = challengeResolver.resolveFor(c, user);
+		dbConnection.saveExpectedAnswerOfUser(username, answer);
 	}
-
 }

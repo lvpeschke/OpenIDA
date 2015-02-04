@@ -6,6 +6,9 @@
   		<link rel="stylesheet" href="../css/bootstrap/dist/css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="../css/provider.css" media="screen">
         <link rel="stylesheet" type="text/css" href="../css/common.css" media="screen">
+        
+        <script src="https://code.jquery.com/jquery-2.1.3.js"></script>
+        <script src="../js/OPLogin.js"></script>
 </head>
 <body>
 
@@ -36,10 +39,10 @@
 
 		<div class="col-md-4 col-md-offset-1 contentDiv">
         	<div class="middleWrapper">
-				<form action="/OpenIdProvider/OpLogin/">
+				<form id="form-login">
 					<legend>Login</legend>
-        			<p><input type="text" name="user" value="" placeholder="Username"></p>
-        			<p><input type="password" name="pwd" value="" placeholder="Password"></p>
+					<p><input id="username-login" type="text" name="user" value="" placeholder="Username"></p>
+					<p><input id="answer-login" type="password" name="pwd" value="" placeholder="Answer"></p>
 					<input type="submit" value="Login">
 				</form>
         	</div>

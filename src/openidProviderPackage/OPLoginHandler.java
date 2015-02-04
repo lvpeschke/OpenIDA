@@ -2,7 +2,6 @@ package openidProviderPackage;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +15,7 @@ import dbPackage.OPdbConnection;
  * 
  */
 public class OPLoginHandler extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 
 	private OPdbConnection dbConnection;
 
@@ -27,13 +27,13 @@ public class OPLoginHandler extends HttpServlet {
 		dbConnection = OPdbConnection.getConnection();
 	}
 
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		handlLoginAttempt(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		handlLoginAttempt(request, response);
 	}
 
@@ -46,8 +46,8 @@ public class OPLoginHandler extends HttpServlet {
 	 *            - The object handling the response back to the user
 	 * @throws IOException
 	 */
-	private void handlLoginAttempt(HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+	private void handlLoginAttempt(HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 
 		String userName = request.getParameter("user");
 		String password = request.getParameter("pwd");
@@ -65,12 +65,12 @@ public class OPLoginHandler extends HttpServlet {
 	 * 
 	 * @param username
 	 *            - The users username
-	 * @param password
+	 * @param answer
 	 *            - The users password
 	 * @return
 	 */
-	private boolean validateLogin(String username, String password) {
-		return dbConnection.validateUserAuthentication(username, password);
+	private boolean validateLogin(String username, String answer) {
+		return dbConnection.validateUserAuthentication(username, answer);
 	}
 
 	/**

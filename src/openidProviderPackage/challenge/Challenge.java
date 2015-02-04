@@ -1,8 +1,17 @@
 package openidProviderPackage.challenge;
 
+import dbPackage.User;
+
 public class Challenge {
 
+	private static final int MIN_FILLED_SQUARE = 3;
+	private static final int MAX_FILLED_SQUARE = 6;
+
 	private Square[][] matrix;
+
+	public Challenge(Square[][] matrix) {
+		this.matrix = matrix;
+	}
 
 	public Challenge() {
 		matrix = new Square[3][3];
@@ -12,14 +21,25 @@ public class Challenge {
 	}
 
 	private void fillSomeSquares() {
-		// between 3 and 6 squares can be filled
-		long nbFilledSquares = Math.round(Math.random() * 3) + 3;
+		long nbFilledSquares = Math.round(Math.random() * (MAX_FILLED_SQUARE - MIN_FILLED_SQUARE))
+				+ MIN_FILLED_SQUARE;
 
 		for (int i = 0; i < nbFilledSquares; i++) {
-			int x = (int) Math.random() * 3;
-			int y = (int) Math.random() * 3;
-			matrix[x][y].fill();
+			Square emptySquare = selectRandomEmptySquare();
+			emptySquare.fill();
 		}
+	}
+
+	private Square selectRandomEmptySquare() {
+		int x;
+		int y;
+
+		do {
+			x = (int) Math.round(Math.random() * 2);
+			y = (int) Math.round(Math.random() * 2);
+		} while (matrix[x][y].isFilled());
+
+		return matrix[x][y];
 	}
 
 	private void fillMatrixWithEmptySquare() {
@@ -32,6 +52,13 @@ public class Challenge {
 
 	public Square getSquare(int x, int y) {
 		return matrix[x][y];
+	}
+
+	public String resolveFor(User user) {
+
+		return null;
+		// TODO Auto-generated method stub
+
 	}
 
 }

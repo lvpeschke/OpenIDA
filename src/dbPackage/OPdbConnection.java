@@ -51,8 +51,13 @@ public class OPdbConnection {
 	private static final String constClientID = "client_id";
 	private static final String constResponseType = "response_type";
 	private static final String constScope = "scope";
+
 	private static final String constUsername = "userName";
+	private static final String constExpectedAnswer = "expectedAnswer";
+	private static final String constPositions = "positions";
+	private static final String constColors = "colors";
 	private static final String constPassword = "password";
+
 	private static final String constOPAuthenticationRequestTable = "OPAuthenticationRequest";
 	private static final String constOPUserTable = "OPUserTable";
 	private static final String constOPClientIdTable = "OPClientIdTable";
@@ -80,11 +85,10 @@ public class OPdbConnection {
 
 		try {
 			connection = getDBConnection();
-			pst = connection.prepareStatement("INSERT INTO "
-					+ constOPAuthenticationRequestTable + "("
-					+ constRedirectURI + ", " + constState + ", " + constNonce
-					+ ", " + constClientID + ",  " + constResponseType + ", "
-					+ constScope + ") VALUES( ?, ?, ?, ?, ?, ?)");
+			pst = connection.prepareStatement("INSERT INTO " + constOPAuthenticationRequestTable
+					+ "(" + constRedirectURI + ", " + constState + ", " + constNonce + ", "
+					+ constClientID + ",  " + constResponseType + ", " + constScope
+					+ ") VALUES( ?, ?, ?, ?, ?, ?)");
 
 			pst.setString(i++, redirectURI);
 			pst.setString(i++, state);
@@ -95,8 +99,7 @@ public class OPdbConnection {
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out
-					.println("OPdbConnection - ERROR: problem saving the AuthenticationRequest");
+			System.out.println("OPdbConnection - ERROR: problem saving the AuthenticationRequest");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -130,8 +133,7 @@ public class OPdbConnection {
 		try {
 			connection = getDBConnection();
 			pst = connection.prepareStatement("SELECT count(*) from "
-					+ constOPAuthenticationRequestTable + " WHERE "
-					+ constNonce + " = ?");
+					+ constOPAuthenticationRequestTable + " WHERE " + constNonce + " = ?");
 			pst.setString(i++, nonce);
 			rs = pst.executeQuery();
 		} catch (SQLException e) {
@@ -159,8 +161,7 @@ public class OPdbConnection {
 			if (rs.next()) {
 				count = rs.getInt(1);
 			} else {
-				System.out
-						.println("OPdbConnection - ERROR: No such AuthenticationRequest");
+				System.out.println("OPdbConnection - ERROR: No such AuthenticationRequest");
 				return false;
 			}
 			if (count != 1) {
@@ -169,8 +170,7 @@ public class OPdbConnection {
 				return false;
 			}
 		} catch (SQLException e) {
-			System.out
-					.println("OPdbConnection - ERROR: Problem counting the responses");
+			System.out.println("OPdbConnection - ERROR: Problem counting the responses");
 			e.printStackTrace();
 			return false;
 		}
@@ -187,22 +187,20 @@ public class OPdbConnection {
 	 * @param passwor
 	 * @return - If atleast one user with that password and username exists
 	 */
-	public boolean validateUserAuthentication(String username, String password) {
+	public boolean validateUserAuthentication(String username, String answer) {
 		ResultSet rs = null;
 		PreparedStatement pst = null;
 		Connection connection = null;
 		int i = 1;
 		try {
 			connection = getDBConnection();
-			pst = connection.prepareStatement("SELECT count(*) from "
-					+ constOPUserTable + " WHERE " + constUsername
-					+ " = ? AND " + constPassword + " = ?");
+			pst = connection.prepareStatement("SELECT count(*) from " + constOPUserTable
+					+ " WHERE " + constUsername + " = ? AND " + constExpectedAnswer + " = ?");
 			pst.setString(i++, username);
-			pst.setString(i++, password);
+			pst.setString(i++, answer);
 			rs = pst.executeQuery();
 		} catch (SQLException e) {
-			System.out
-					.println("OPdbConnection - ERROR: problem checking if User is in db");
+			System.out.println("OPdbConnection - ERROR: problem checking if User is in db");
 			e.printStackTrace();
 			return false;
 		}
@@ -264,9 +262,8 @@ public class OPdbConnection {
 
 		try {
 			connection = getDBConnection();
-			pst = connection.prepareStatement("SELECT * FROM "
-					+ constOPAuthenticationRequestTable + " WHERE "
-					+ constNonce + " =?");
+			pst = connection.prepareStatement("SELECT * FROM " + constOPAuthenticationRequestTable
+					+ " WHERE " + constNonce + " =?");
 			pst.setString(i++, nonce);
 			rs = pst.executeQuery();
 			req = getSpecificAuthRequest(rs);
@@ -276,22 +273,7 @@ public class OPdbConnection {
 			ex.printStackTrace();
 			return null;
 		} finally {
-			try {
-				if (pst != null) {
-					pst.close();
-				}
-				if (rs != null) {
-					rs.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (SQLException ex) {
-				System.out
-						.println("OPdbConnection - ERROR: Problem closing the connection to the database");
-				ex.printStackTrace();
-				return null;
-			}
+			closeConnection(rs, pst, connection);
 		}
 		return req;
 	}
@@ -305,8 +287,7 @@ public class OPdbConnection {
 	 */
 	private AuthenticationRequest getSpecificAuthRequest(ResultSet rs) {
 		if (rs == null) {
-			System.out
-					.println("OPdbConnection - ERROR: Specific AuthenticationRequest RS is null");
+			System.out.println("OPdbConnection - ERROR: Specific AuthenticationRequest RS is null");
 			return null;
 		}
 		int a = 0;
@@ -317,8 +298,7 @@ public class OPdbConnection {
 				a++;
 			}
 		} catch (SQLException e) {
-			System.out
-					.println("OPdbConnection - ERROR: Problem reading response");
+			System.out.println("OPdbConnection - ERROR: Problem reading response");
 			e.printStackTrace();
 			return null;
 		}
@@ -344,8 +324,7 @@ public class OPdbConnection {
 	 * @return - The AuthAlowed obejct created
 	 * @throws SQLException
 	 */
-	private AuthenticationRequest tryCreateAuthAllowed(ResultSet rs)
-			throws SQLException {
+	private AuthenticationRequest tryCreateAuthAllowed(ResultSet rs) throws SQLException {
 		HashMap<String, String> hashMap = new HashMap<>();
 		hashMap.put(constRedirectURI, rs.getString(constRedirectURI));
 		hashMap.put(constState, rs.getString(constState));
@@ -380,15 +359,12 @@ public class OPdbConnection {
 		int i = 1;
 		try {
 			connection = getDBConnection();
-			pst = connection
-					.prepareStatement("SELECT count(*) from "
-							+ constOPClientIdTable + " WHERE " + constClientID
-							+ " = ?");
+			pst = connection.prepareStatement("SELECT count(*) from " + constOPClientIdTable
+					+ " WHERE " + constClientID + " = ?");
 			pst.setString(i++, id);
 			rs = pst.executeQuery();
 		} catch (SQLException e) {
-			System.out
-					.println("OPdbConnection - ERROR: problem checking if clientid is in db");
+			System.out.println("OPdbConnection - ERROR: problem checking if clientid is in db");
 			e.printStackTrace();
 			return false;
 		}
@@ -405,8 +381,7 @@ public class OPdbConnection {
 				return false;
 			}
 		} catch (SQLException e) {
-			System.out
-					.println("OPdbConnection - ERROR: Problem counting the responses");
+			System.out.println("OPdbConnection - ERROR: Problem counting the responses");
 			e.printStackTrace();
 			return false;
 		} finally {
@@ -444,15 +419,14 @@ public class OPdbConnection {
 
 		try {
 			connection = getDBConnection();
-			pst = connection.prepareStatement("DELETE " + constOPLoggedInTable
-					+ " WHERE " + constSessionID + " = ?");
+			pst = connection.prepareStatement("DELETE " + constOPLoggedInTable + " WHERE "
+					+ constSessionID + " = ?");
 
 			pst.setString(i++, id);
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out
-					.println("OPdbConnection - ERROR: problem loging out the user");
+			System.out.println("OPdbConnection - ERROR: problem loging out the user");
 			e.printStackTrace();
 			return false;
 		} finally {
@@ -486,16 +460,14 @@ public class OPdbConnection {
 
 		try {
 			connection = getDBConnection();
-			pst = connection.prepareStatement("INSERT INTO "
-					+ constOPLoggedInTable + "(" + constSessionID
-					+ ") VALUES(?)");
+			pst = connection.prepareStatement("INSERT INTO " + constOPLoggedInTable + "("
+					+ constSessionID + ") VALUES(?)");
 
 			pst.setString(i++, id);
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out
-					.println("OPdbConnection - ERROR: problem saving the SessionId");
+			System.out.println("OPdbConnection - ERROR: problem saving the SessionId");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -530,16 +502,13 @@ public class OPdbConnection {
 
 		try {
 			connection = getDBConnection();
-			pst = connection
-					.prepareStatement("SELECT COUNT(*) FROM "
-							+ constOPLoggedInTable + " WHERE " + constSessionID
-							+ " =?");
+			pst = connection.prepareStatement("SELECT COUNT(*) FROM " + constOPLoggedInTable
+					+ " WHERE " + constSessionID + " =?");
 			pst.setString(i++, id);
 			rs = pst.executeQuery();
 			isLoggedIn = checkIfUserIsLoggedIn(rs);
 		} catch (SQLException ex) {
-			System.out
-					.println("OPdbConnection - ERROR: Select statement error");
+			System.out.println("OPdbConnection - ERROR: Select statement error");
 			ex.printStackTrace();
 			return false;
 		} finally {
@@ -570,8 +539,7 @@ public class OPdbConnection {
 			rs.next();
 			rowCount = rs.getInt(1);
 		} catch (SQLException e) {
-			System.out
-					.println("OPdbConnection - ERROR: Problem checking logged in user");
+			System.out.println("OPdbConnection - ERROR: Problem checking logged in user");
 			e.printStackTrace();
 			return false;
 		}
@@ -676,10 +644,9 @@ public class OPdbConnection {
 		Statement stmt = null;
 		Connection connection = null;
 
-		String sql = "CREATE TABLE IF NOT EXISTS " + constOPUserTable + " "
-				+ "(" + constUsername + " VARCHAR(255), " + " " + constPassword
-				+ " VARCHAR(255), " + constUserPicture + " mediumblob, "
-				+ " PRIMARY KEY ( " + constUsername + " ))";
+		String sql = "CREATE TABLE IF NOT EXISTS " + constOPUserTable + " " + "(" + constUsername
+				+ " VARCHAR(255), " + " " + constExpectedAnswer + " VARCHAR(255), "
+				+ constUserPicture + " mediumblob, " + " PRIMARY KEY ( " + constUsername + " ))";
 		try {
 			connection = getDBConnection();
 			stmt = connection.createStatement();
@@ -720,9 +687,8 @@ public class OPdbConnection {
 			e1.printStackTrace();
 		}
 
-		String sql = "CREATE TABLE IF NOT EXISTS " + constOPClientIdTable + " "
-				+ "(" + constClientID + " VARCHAR(255), " + " PRIMARY KEY ( "
-				+ constClientID + " ))";
+		String sql = "CREATE TABLE IF NOT EXISTS " + constOPClientIdTable + " " + "("
+				+ constClientID + " VARCHAR(255), " + " PRIMARY KEY ( " + constClientID + " ))";
 		try {
 			stmt.executeUpdate(sql);
 			System.out.println("Created table in given database...");
@@ -751,14 +717,11 @@ public class OPdbConnection {
 		Statement stmt = null;
 		Connection connection = null;
 
-		String sql = "CREATE TABLE IF NOT EXISTS "
-				+ constOPAuthenticationRequestTable + " " + "("
-				+ constRedirectURI + " VARCHAR(255), " + " " + constState
-				+ " VARCHAR(255), " + " " + constNonce + " VARCHAR(255), "
-				+ " " + constClientID + " VARCHAR(255), " + " "
-				+ constResponseType + " VARCHAR(255), " + " " + constScope
-				+ " VARCHAR(255), " + " " + " PRIMARY KEY ( " + constState
-				+ " ))";
+		String sql = "CREATE TABLE IF NOT EXISTS " + constOPAuthenticationRequestTable + " " + "("
+				+ constRedirectURI + " VARCHAR(255), " + " " + constState + " VARCHAR(255), " + " "
+				+ constNonce + " VARCHAR(255), " + " " + constClientID + " VARCHAR(255), " + " "
+				+ constResponseType + " VARCHAR(255), " + " " + constScope + " VARCHAR(255), "
+				+ " " + " PRIMARY KEY ( " + constState + " ))";
 		try {
 			connection = getDBConnection();
 			stmt = connection.createStatement();
@@ -797,9 +760,8 @@ public class OPdbConnection {
 
 		try {
 			connection = getDBConnection();
-			pst = connection.prepareStatement("INSERT INTO "
-					+ constOPClientIdTable + "(" + constClientID
-					+ ") VALUES(?)");
+			pst = connection.prepareStatement("INSERT INTO " + constOPClientIdTable + "("
+					+ constClientID + ") VALUES(?)");
 
 			pst.setString(i++, clientID);
 			pst.executeUpdate();
@@ -851,9 +813,8 @@ public class OPdbConnection {
 			e1.printStackTrace();
 		}
 
-		String sql = "CREATE TABLE IF NOT EXISTS " + constOPLoggedInTable + " "
-				+ "(" + constSessionID + " VARCHAR(255), " + " PRIMARY KEY ( "
-				+ constSessionID + " ))";
+		String sql = "CREATE TABLE IF NOT EXISTS " + constOPLoggedInTable + " " + "("
+				+ constSessionID + " VARCHAR(255), " + " PRIMARY KEY ( " + constSessionID + " ))";
 		try {
 			stmt.executeUpdate(sql);
 			System.out.println("Created table in given database...");
@@ -888,9 +849,8 @@ public class OPdbConnection {
 
 		try {
 			connection = getDBConnection();
-			pst = connection.prepareStatement("INSERT INTO " + constOPUserTable
-					+ "(" + constUsername + ", " + constPassword
-					+ ") VALUES(?, ?)");
+			pst = connection.prepareStatement("INSERT INTO " + constOPUserTable + "("
+					+ constUsername + ", " + constExpectedAnswer + ") VALUES(?, ?)");
 
 			pst.setString(i++, username);
 			pst.setString(i++, password);
@@ -932,9 +892,8 @@ public class OPdbConnection {
 		Blob blob = null;
 		try {
 			connection = getDBConnection();
-			pst = connection.prepareStatement("SELECT " + constUserPicture
-					+ " FROM " + constOPUserTable + " WHERE " + constUsername
-					+ " = ?");
+			pst = connection.prepareStatement("SELECT " + constUserPicture + " FROM "
+					+ constOPUserTable + " WHERE " + constUsername + " = ?");
 
 			pst.setString(i++, userName);
 			rs = pst.executeQuery();
@@ -944,27 +903,11 @@ public class OPdbConnection {
 			}
 
 		} catch (SQLException ex) {
-			System.out
-					.println("OPdbConnection - ERROR: Select statement error");
+			System.out.println("OPdbConnection - ERROR: Select statement error");
 			ex.printStackTrace();
 			return null;
 		} finally {
-			try {
-				if (pst != null) {
-					pst.close();
-				}
-				if (rs != null) {
-					rs.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (SQLException ex) {
-				System.out
-						.println("OPdbConnection - ERROR: Problem closing the connection to the database");
-				ex.printStackTrace();
-				return null;
-			}
+			closeConnection(rs, pst, connection);
 		}
 		return blob;
 	}
@@ -986,17 +929,15 @@ public class OPdbConnection {
 		Connection connection = null;
 		try {
 			connection = getDBConnection();
-			pst = connection.prepareStatement("UPDATE " + constOPUserTable
-					+ " SET " + constUserPicture + " = ? WHERE "
-					+ constUsername + " = ?");
+			pst = connection.prepareStatement("UPDATE " + constOPUserTable + " SET "
+					+ constUserPicture + " = ? WHERE " + constUsername + " = ?");
 
 			pst.setBlob(i++, inputStream);
 			pst.setString(i++, userName);
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out
-					.println("OPdbConnection - ERROR: problem saving the Picture");
+			System.out.println("OPdbConnection - ERROR: problem saving the Picture");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -1012,5 +953,64 @@ public class OPdbConnection {
 				ex.printStackTrace();
 			}
 		}
+	}
+
+	// TODO definitely !
+	public User getUserInfo(String username) {
+
+		ResultSet rs = null;
+		User userInfo = null;
+
+		PreparedStatement pst = null;
+		Connection connection = null;
+		try {
+			connection = getDBConnection();
+			pst = connection.prepareStatement("SELECT " + constPositions + ", " + constColors
+					+ ", " + constPassword + ", " + " FROM " + constOPUserTable + " WHERE "
+					+ constUsername + " = ?");
+
+			pst.setString(0, username);
+			rs = pst.executeQuery();
+
+			if (rs.next()) {
+				byte[] positions = rs.getBytes(constPositions);
+				byte[] colors = rs.getBytes(constColors);
+				String password = rs.getString(constPassword);
+
+				// userInfo = new User(username, positions, colors, password);
+			} else {
+				throw new UserNotFoundException(username);
+			}
+
+		} catch (SQLException ex) {
+			System.out.println("OPdbConnection - ERROR: Select statement error");
+			ex.printStackTrace();
+		} finally {
+			closeConnection(rs, pst, connection);
+		}
+		return userInfo;
+	}
+
+	private void closeConnection(ResultSet rs, PreparedStatement pst, Connection connection) {
+		try {
+			if (pst != null) {
+				pst.close();
+			}
+			if (rs != null) {
+				rs.close();
+			}
+			if (connection != null) {
+				connection.close();
+			}
+		} catch (SQLException ex) {
+			System.out
+					.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+			ex.printStackTrace();
+		}
+	}
+
+	public void saveExpectedAnswerOfUser(String username, String answer) {
+		// TODO Auto-generated method stub
+
 	}
 }

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +19,7 @@ import dbPackage.OPdbConnection;
  * 
  */
 public class OPDataProvider extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 
 	private OPdbConnection dbConnection;
 
@@ -31,13 +31,13 @@ public class OPDataProvider extends HttpServlet {
 		dbConnection = OPdbConnection.getConnection();
 	}
 
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		generateJsonResponse(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		generateJsonResponse(request, response);
 	}
 
@@ -51,8 +51,8 @@ public class OPDataProvider extends HttpServlet {
 	 *            - The object handling the response back to the user
 	 * @throws IOException
 	 */
-	private void generateJsonResponse(HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+	private void generateJsonResponse(HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 		String jsonResponse = "{";
 
 		HttpSession session = request.getSession();
@@ -61,8 +61,7 @@ public class OPDataProvider extends HttpServlet {
 		if (userName != null && nonce != null) {
 			AuthenticationRequest req = getUsersWaitingAuthRequest(nonce);
 			if (req != null) {
-				jsonResponse += "\"" + req.getClientID().toString() + "\":\""
-						+ true + "\"}";
+				jsonResponse += "\"" + req.getClientID().toString() + "\":\"" + true + "\"}";
 			} else {
 				jsonResponse += "\"" + "No relyingParty" + "\":\"true\"}";
 			}

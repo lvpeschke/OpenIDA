@@ -8,7 +8,7 @@
 *.ear
 
 # Latex compile files
-
+*.synctex.gz
 *.pdf
 *.out
 *.log

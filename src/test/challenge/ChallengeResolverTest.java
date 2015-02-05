@@ -21,10 +21,13 @@ public class ChallengeResolverTest {
 	}
 
 	private void setUpAnyUser() {
-		boolean[] colors = new boolean[]{false, true, false, false, true, true}; // brown, green, purple
-		boolean[][] positions = new boolean[][]{{true, true, true}, {false, false, true}, {false, false, false}};
+		boolean[] colors = new boolean[] { false, true, false, false, true, true }; // brown,
+																					// green,
+																					// purple
+		boolean[][] positions = new boolean[][] { { true, true, true }, { false, false, true },
+				{ false, false, false } };
 		String password = "CHRLIE";
-		new User("Lena", positions, colors , password);
+		someUser = new User("Lena", positions, colors, password);
 
 	}
 
@@ -41,8 +44,8 @@ public class ChallengeResolverTest {
 				}
 			}
 		}
-		
-		matrix[3][2] = new Square('K', 0); // black 
+
+		matrix[2][1] = new Square('K', 0); // black
 
 		someChallenge = new Challenge(matrix);
 	}
@@ -50,5 +53,11 @@ public class ChallengeResolverTest {
 	@Test
 	public void withGivenChallengeAndUserThenLetterInSelectedPositionsArePartOfTheAnswer() {
 		assertTrue(someChallenge.resolveFor(someUser).equals("ABC"));
+	}
+
+	public static void main(String[] args) {
+		ChallengeResolverTest c = new ChallengeResolverTest();
+		c.setUp();
+		c.withGivenChallengeAndUserThenLetterInSelectedPositionsArePartOfTheAnswer();
 	}
 }

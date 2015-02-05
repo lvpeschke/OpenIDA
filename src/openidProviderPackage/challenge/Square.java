@@ -1,7 +1,5 @@
 package openidProviderPackage.challenge;
 
-import java.awt.Color;
-
 public class Square {
 
 	private boolean isFilled;

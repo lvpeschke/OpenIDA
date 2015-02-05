@@ -54,23 +54,47 @@ public class Challenge {
 		return matrix[x][y];
 	}
 
-	// TODO be careful with order of letters
+	// be careful with order of letters
 	public String resolveFor(User user) {
 		String answer = "";
-		
-		for (int i=0; i<3; i++) {
-			for (int j=0; j<3; j++) {
-				Square square = matrix[i][j];
-				if (square.isFilled() && user.getPositions()[i][j]) {
-					answer+=square.getLetter();
-				} else if (user.getColors()[square.getColor()]) {
-					answer+=square.getLetter();
-				} else if (user.getPassword().indexOf(square.getLetter()) > -1) {
-					answer+=square.getLetter();
-				}
+
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				answer = addLetterForAllCorrespondingSquares(user, answer, i, j);
 			}
 		}
 		return answer;
+	}
+
+	private String addLetterForAllCorrespondingSquares(User user, String answer, int i, int j) {
+		Square square = matrix[i][j];
+
+		if (square.isFilled()) {
+			if (isSquareCorrespondToUserChoices(square, i, j, user)) {
+				answer += square.getLetter();
+			}
+		}
+
+		return answer;
+	}
+
+	private boolean isSquareCorrespondToUserChoices(Square square, int i, int j, User user) {
+		boolean[][] positions = user.getPositions();
+		boolean[] colors = user.getColors();
+		String password = user.getPassword();
+
+		if (positions[i][j]) {
+			return true;
+		}
+
+		if (colors[square.getColor()]) {
+			return true;
+		}
+
+		if (password.indexOf(square.getLetter()) > -1) {
+			return true;
+		}
+		return false;
 	}
 
 }

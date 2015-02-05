@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
+import javax.swing.text.Position;
+
 import com.nimbusds.oauth2.sdk.ParseException;
 import com.nimbusds.oauth2.sdk.id.ClientID;
 import com.nimbusds.openid.connect.sdk.AuthenticationRequest;
@@ -197,7 +199,7 @@ public class OPdbConnection {
 			pst = connection.prepareStatement("SELECT count(*) from " + constOPUserTable
 					+ " WHERE " + constUsername + " = ? AND " + constExpectedAnswer + " = ?");
 			pst.setString(i++, username);
-			pst.setString(i++, answer); //TODO careful with order
+			pst.setString(i++, answer); // TODO careful with order
 			rs = pst.executeQuery();
 		} catch (SQLException e) {
 			System.out.println("OPdbConnection - ERROR: problem checking if User is in db");
@@ -645,8 +647,8 @@ public class OPdbConnection {
 		Connection connection = null;
 
 		String sql = "CREATE TABLE IF NOT EXISTS " + constOPUserTable + " " + "(" + constUsername
-				+ " VARCHAR(255), " + " " + constExpectedAnswer + " VARCHAR(12), "
-				+ constPositions + " BINARY(9), " +  constColors + " BINARY(6), " + constPassword  + " VARCHAR(12), "
+				+ " VARCHAR(255), " + " " + constExpectedAnswer + " VARCHAR(12), " + constPositions
+				+ " BINARY(2), " + constColors + " BINARY(1), " + constPassword + " VARCHAR(12), "
 				+ constUserPicture + " mediumblob, " + " PRIMARY KEY ( " + constUsername + " ))";
 		try {
 			connection = getDBConnection();
@@ -973,8 +975,9 @@ public class OPdbConnection {
 			pst.setString(0, username);
 			rs = pst.executeQuery();
 
+			byte[] positions;
 			if (rs.next()) {
-				byte[] positions = rs.getBytes(constPositions);
+				positions = rs.getBytes(constPositions);
 				byte[] colors = rs.getBytes(constColors);
 				String password = rs.getString(constPassword);
 
@@ -982,6 +985,7 @@ public class OPdbConnection {
 			} else {
 				throw new UserNotFoundException(username);
 			}
+			System.out.println("positions: " + positions);
 
 		} catch (SQLException ex) {
 			System.out.println("OPdbConnection - ERROR: Select statement error");

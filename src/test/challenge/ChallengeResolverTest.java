@@ -1,5 +1,6 @@
 package test.challenge;
 
+import static org.junit.Assert.*;
 import openidProviderPackage.challenge.Challenge;
 import openidProviderPackage.challenge.Square;
 
@@ -20,7 +21,10 @@ public class ChallengeResolverTest {
 	}
 
 	private void setUpAnyUser() {
-		// new User("Lena", positions, colors, password)
+		boolean[] colors = new boolean[]{false, true, false, false, true, true}; // brown, green, purple
+		boolean[][] positions = new boolean[][]{{true, true, true}, {false, false, true}, {false, false, false}};
+		String password = "CHRLIE";
+		new User("Lena", positions, colors , password);
 
 	}
 
@@ -31,18 +35,20 @@ public class ChallengeResolverTest {
 			for (int j = 0; j < 3; j++) {
 				if (i == j) {
 					char letter = (char) (65 + i); // will be A, B then C
-					//matrix[i][j] = new Square(letter, Square.COLORS[i]);
+					matrix[i][j] = new Square(letter, i);
 				} else {
 					matrix[i][j] = new Square();
 				}
 			}
 		}
+		
+		matrix[3][2] = new Square('K', 0); // black 
 
 		someChallenge = new Challenge(matrix);
 	}
 
 	@Test
 	public void withGivenChallengeAndUserThenLetterInSelectedPositionsArePartOfTheAnswer() {
-		// TODO
+		assertTrue(someChallenge.resolveFor(someUser).equals("ABC"));
 	}
 }

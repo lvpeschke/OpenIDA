@@ -20,7 +20,7 @@ public class ChallengeResolverTest {
 	}
 
 	private void setUpAnyUser() {
-		// TODO Auto-generated method stub
+		// new User("Lena", positions, colors, password)
 
 	}
 

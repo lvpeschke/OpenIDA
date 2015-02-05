@@ -31,7 +31,7 @@ public class ChallengeResolverTest {
 			for (int j = 0; j < 3; j++) {
 				if (i == j) {
 					char letter = (char) (65 + i); // will be A, B then C
-					matrix[i][j] = new Square(letter, Square.COLORS[i]);
+					//matrix[i][j] = new Square(letter, Square.COLORS[i]);
 				} else {
 					matrix[i][j] = new Square();
 				}

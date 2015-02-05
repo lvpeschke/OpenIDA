@@ -4,18 +4,15 @@ import java.awt.Color;
 
 public class Square {
 
-	public static final Color[] COLORS = { Color.BLACK, new Color(176, 117, 0), Color.BLUE,
-			Color.RED, Color.GREEN, new Color(168, 95, 210) };
-
 	private boolean isFilled;
 	private char letter;
-	private Color color;
+	private int color;
 
 	public Square() {
 		isFilled = false;
 	}
 
-	public Square(char letter, Color color) {
+	public Square(char letter, int color) {
 		this.isFilled = true;
 		this.letter = letter;
 		this.color = color;
@@ -34,7 +31,7 @@ public class Square {
 
 	private void selectRandomColor() {
 		int randomColorIndex = (int) Math.round(Math.random() * 5);
-		color = COLORS[randomColorIndex];
+		color = randomColorIndex;
 	}
 
 	private void selectRandomLetter() {
@@ -46,7 +43,7 @@ public class Square {
 		return letter;
 	}
 
-	public Color getColor() {
+	public int getColor() {
 		return color;
 	}
 }

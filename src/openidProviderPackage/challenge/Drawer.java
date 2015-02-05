@@ -11,6 +11,8 @@ public class Drawer {
 	private static final int IMAGE_SIZE = 200;
 	private static final int LINE_WIDTH = 2;
 	private static final int FONT_SIZE = 40;
+	public static final Color[] COLORS = { Color.BLACK, new Color(176, 117, 0), Color.BLUE,
+		Color.RED, Color.GREEN, new Color(168, 95, 210) };
 
 	public BufferedImage drawChallengeImage(Challenge c) {
 		BufferedImage image = new BufferedImage(IMAGE_SIZE, IMAGE_SIZE, BufferedImage.TYPE_INT_RGB);
@@ -50,7 +52,7 @@ public class Drawer {
 	}
 
 	private void drawSquare(Graphics2D g, Square square, int x, int y) {
-		g.setColor(square.getColor());
+		g.setColor(COLORS[square.getColor()]);
 		g.setFont(new Font("Courier", Font.PLAIN, FONT_SIZE));
 		g.drawString("" + square.getLetter(), x, y);
 

@@ -54,11 +54,23 @@ public class Challenge {
 		return matrix[x][y];
 	}
 
+	// TODO be careful with order of letters
 	public String resolveFor(User user) {
-
-		return null;
-		// TODO Auto-generated method stub
-
+		String answer = "";
+		
+		for (int i=0; i<3; i++) {
+			for (int j=0; j<3; j++) {
+				Square square = matrix[i][j];
+				if (square.isFilled() && user.getPositions()[i][j]) {
+					answer+=square.getLetter();
+				} else if (user.getColors()[square.getColor()]) {
+					answer+=square.getLetter();
+				} else if (user.getPassword().indexOf(square.getLetter()) > -1) {
+					answer+=square.getLetter();
+				}
+			}
+		}
+		return answer;
 	}
 
 }

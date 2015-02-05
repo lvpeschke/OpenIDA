@@ -9,22 +9,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import openidProviderPackage.challenge.Challenge;
-import openidProviderPackage.challenge.ChallengeResolver;
 import openidProviderPackage.challenge.Drawer;
 import dbPackage.OPdbConnection;
 import dbPackage.User;
+import dbPackage.UserNotFoundException;
 
 /**
  * This class generate the challenge for the authentication
  */
 public class OPChallengeGenerator extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
 	private OPdbConnection dbConnection;
-
 	private Drawer drawer;
-
-	private ChallengeResolver challengeResolver;
 
 	/**
 	 * Create a connection to the database
@@ -52,8 +48,13 @@ public class OPChallengeGenerator extends HttpServlet {
 	}
 
 	private void putExpectedAnswerIntoDB(Challenge c, String username) {
-		User user = dbConnection.getUserInfo(username);
-		String answer = challengeResolver.resolveFor(c, user);
-		dbConnection.saveExpectedAnswerOfUser(username, answer);
+		try {
+			User user = dbConnection.getUserInfo(username);
+			String answer = c.resolveFor(user);
+			dbConnection.saveExpectedAnswerOfUser(username, answer);
+		} catch (UserNotFoundException e) {
+			// do nothing
+		}
+		
 	}
 }

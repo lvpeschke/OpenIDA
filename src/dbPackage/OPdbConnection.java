@@ -646,7 +646,7 @@ public class OPdbConnection {
 
 		String sql = "CREATE TABLE IF NOT EXISTS " + constOPUserTable + " " + "(" + constUsername
 				+ " VARCHAR(255), " + " " + constExpectedAnswer + " VARCHAR(12), "
-				+ constPositions + " BINARY(9), " +  constColors + " BINARY(6), " + constPassword  + " VARCHAR(12), "
+				+ constPositions + " BYTES(3), " +  constColors + " BYTES(1), " + constPassword  + " VARCHAR(12), "
 				+ constUserPicture + " mediumblob, " + " PRIMARY KEY ( " + constUsername + " ))";
 		try {
 			connection = getDBConnection();
@@ -956,7 +956,6 @@ public class OPdbConnection {
 		}
 	}
 
-	// TODO definitely !
 	public User getUserInfo(String username) {
 
 		ResultSet rs = null;
@@ -978,7 +977,9 @@ public class OPdbConnection {
 				byte[] colors = rs.getBytes(constColors);
 				String password = rs.getString(constPassword);
 
-				// userInfo = new User(username, positions, colors, password);
+				boolean[] colorsBool = UserSecretHandler.colorsByteToBool(colors);
+				boolean[][] positionsBool = UserSecretHandler.positionsByteToBool(positions);
+				userInfo = new User(username, positionsBool, colorsBool, password);
 			} else {
 				throw new UserNotFoundException(username);
 			}

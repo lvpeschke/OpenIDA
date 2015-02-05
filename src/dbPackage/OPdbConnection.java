@@ -185,7 +185,7 @@ public class OPdbConnection {
 	 * 
 	 * @param username
 	 * @param passwor
-	 * @return - If atleast one user with that password and username exists
+	 * @return - If at least one user with that password and username exists
 	 */
 	public boolean validateUserAuthentication(String username, String answer) {
 		ResultSet rs = null;
@@ -197,7 +197,7 @@ public class OPdbConnection {
 			pst = connection.prepareStatement("SELECT count(*) from " + constOPUserTable
 					+ " WHERE " + constUsername + " = ? AND " + constExpectedAnswer + " = ?");
 			pst.setString(i++, username);
-			pst.setString(i++, answer);
+			pst.setString(i++, answer); //TODO careful with order
 			rs = pst.executeQuery();
 		} catch (SQLException e) {
 			System.out.println("OPdbConnection - ERROR: problem checking if User is in db");
@@ -645,7 +645,8 @@ public class OPdbConnection {
 		Connection connection = null;
 
 		String sql = "CREATE TABLE IF NOT EXISTS " + constOPUserTable + " " + "(" + constUsername
-				+ " VARCHAR(255), " + " " + constExpectedAnswer + " VARCHAR(255), "
+				+ " VARCHAR(255), " + " " + constExpectedAnswer + " VARCHAR(12), "
+				+ constPositions + " BINARY(9), " +  constColors + " BINARY(6), " + constPassword  + " VARCHAR(12), "
 				+ constUserPicture + " mediumblob, " + " PRIMARY KEY ( " + constUsername + " ))";
 		try {
 			connection = getDBConnection();

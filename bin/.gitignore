@@ -1,4 +1,7 @@
-/dbPackage
-/relyingPartypackage
-/openidProviderPackage
+/dbPackage/
+/filters/
+/openidProviderPackage/
+/relyingPartypackage/
 /serverPackage/
+/webSocketPackage/
+/test/

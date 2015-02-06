@@ -43,11 +43,16 @@ public class UserSecretHandler {
 		return result;
 	}
 	
-	public static boolean[] colorsByteToBool (byte[] colors) {
+	/**
+	 * Convert a byte to a boolean matrix for the colors.
+	 * @param colors: byte
+	 * @return the boolean matrix of bytes for the colors in the matrix
+	 */
+	public static boolean[] colorsByteToBool(byte colors) {
 		boolean[] result = new boolean[6];
 		
 		for (int i=0; i<6; i++) {
-			if ((colors[i] & (2^i)) == (2^i)) {
+			if ((colors & (2^i)) == (2^i)) {
 				result[i] = true;
 			} else {
 				result[i] = false;

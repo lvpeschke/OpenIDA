@@ -653,7 +653,7 @@ public class OPdbConnection {
 
 		String sql = "CREATE TABLE IF NOT EXISTS " + constOPUserTable + " " + "(" + constUsername
 				+ " VARCHAR(255), " + " " + constExpectedAnswer + " VARCHAR(12), " + constPositions
-				+ " BINARY(2), " + constColors + " BINARY(1), " + constPassword + " VARCHAR(12), "
+				+ " BINARY(3), " + constColors + " BINARY(1), " + constPassword + " VARCHAR(12), "
 				+ constUserPicture + " mediumblob, " + " PRIMARY KEY ( " + constUsername + " ))";
 		try {
 			connection = getDBConnection();
@@ -802,7 +802,9 @@ public class OPdbConnection {
 
 		String username = "qwe";
 		String password = "asd";
-		saveNewUser(username, password);
+		byte[] positions = new byte[]{7, 0, 0}; // first row
+		byte colors = 2^2 + 2^3 + 2^4; // green, red, blue
+		saveNewUser(username, password, positions, colors);
 	}
 
 	/**
@@ -848,8 +850,10 @@ public class OPdbConnection {
 	 * 
 	 * @param username
 	 * @param password
+	 * @param positions
+	 * @param colors
 	 */
-	public void saveNewUser(String username, String password) {
+	public void saveNewUser(String username, String password, byte[] positions, byte colors) {
 
 		int i = 1;
 		PreparedStatement pst = null;
@@ -858,9 +862,13 @@ public class OPdbConnection {
 		try {
 			connection = getDBConnection();
 			pst = connection.prepareStatement("INSERT INTO " + constOPUserTable + "("
-					+ constUsername + ", " + constExpectedAnswer + ") VALUES(?, ?)");
+					+ constUsername + ", " + constExpectedAnswer + ", " + constPositions + ", "
+					+ constColors + ", " + constPassword + ") VALUES(?, ?, ?, ?, ?)");
 
 			pst.setString(i++, username);
+			pst.setNull(i++, java.sql.Types.VARCHAR);
+			pst.setBytes(i++, positions);
+			pst.setByte(i++, colors);
 			pst.setString(i++, password);
 			pst.executeUpdate();
 
@@ -982,7 +990,7 @@ public class OPdbConnection {
 			byte[] positions;
 			if (rs.next()) {
 				positions = rs.getBytes(constPositions);
-				byte[] colors = rs.getBytes(constColors);
+				byte colors = rs.getByte(constColors);
 				String password = rs.getString(constPassword);
 
 				boolean[] colorsBool = UserSecretHandler.colorsByteToBool(colors);

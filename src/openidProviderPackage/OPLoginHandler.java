@@ -49,10 +49,10 @@ public class OPLoginHandler extends HttpServlet {
 	private void handlLoginAttempt(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 
-		String userName = request.getParameter("user");
-		String password = request.getParameter("pwd");
+		String userName = request.getPathInfo().substring(1);
+		String answer = request.getParameter("answer");
 
-		if (validateLogin(userName, password)) {
+		if (validateLogin(userName, answer)) {
 			setOPSession(request, userName);
 			response.sendRedirect("/OPViews/loggedIn.html");
 		} else {

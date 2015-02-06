@@ -83,7 +83,7 @@ public class ServerBooter {
 
 		try {
 			server.start();
-													server.join();
+			server.join();
 		} catch (Exception e) {
 			System.out.println("Server crashed while starting");
 		}
@@ -176,7 +176,7 @@ public class ServerBooter {
 		context.addServlet(new ServletHolder(new OPLogOut()), "/OpenIdProvider/OPLogOut/*");
 
 		context.addServlet(new ServletHolder(new OPChallengeGenerator()),
-				"/OpenIdProvider/challenge/*");
+				"/OpenIdProvider/challenge/*"); // Added one
 
 		return context;
 	}

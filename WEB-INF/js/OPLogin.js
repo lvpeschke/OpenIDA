@@ -7,14 +7,15 @@ $(document).ready(function(){
 
 	$('#form-login').submit(function(event){
 		var usernameValue = $('#username-login').val();
+		console.log(usernameValue);
 
 		if(usernameValue.trim()){
-			$('#username-login').hide();
-			$('#answer-login').show();
-			$('<img src="http://localhost:8054/OpenIdProvider/challenge/"' + usernameValue + ' >').insertBefore($('#answer-login'));
+			$('#form-login').hide();
+			$('<form id=form-login2 action="http://localhost:8054/OpenIdProvider/OpLogin/' + usernameValue + '"><legend>Login</legend></form>').insertAfter($('#form-login'));
+			$('#form-login2').append($('<img src="http://localhost:8054/OpenIdProvider/challenge/"' + usernameValue + ' >'));
+			$('#form-login2').append($('<input type=password id=answer placeholder="Answer">'));
+
+			$('#form-login2').append($('<input type="submit" value="Submit">'));
 		}
 	});
-
-	console.log($('#form-login'));
-
 });

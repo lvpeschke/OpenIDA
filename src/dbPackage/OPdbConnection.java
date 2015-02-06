@@ -798,7 +798,7 @@ public class OPdbConnection {
 	 * Creates a row in the UserTable which will contain the 'user':
 	 * username='qwe' & password='asd'
 	 */
-	private void putDefaultUserInTable() {
+	private void putDefaultUserInTable() { //TODO
 
 		String username = "qwe";
 		String password = "asd";

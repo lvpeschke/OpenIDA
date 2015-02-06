@@ -641,7 +641,7 @@ public class OPdbConnection {
 	/**
 	 * A method to create the UserTable
 	 */
-	private void createUserTable() {
+	private void createUserTable() { //TODO: take car of the bit/byte situation
 		System.out.println("Creating userTable");
 		Statement stmt = null;
 		Connection connection = null;
@@ -793,12 +793,12 @@ public class OPdbConnection {
 	 * Creates a row in the UserTable which will contain the 'user':
 	 * username='qwe' & password='asd'
 	 */
-	private void putDefaultUserInTable() { //TODO
+	private void putDefaultUserInTable() {
 
 		String username = "qwe";
 		String password = "asd";
 		byte[] positions = new byte[]{7, 0, 0}; // first row
-		byte colors = 2^2 + 2^3 + 2^4; // green, red, blue
+		byte colors = 28; // green 2^4, red 2^3, blue 2^2
 		saveNewUser(username, password, positions, colors);
 	}
 

@@ -88,7 +88,7 @@ public class OPCreateUserHandler extends HttpServlet {
 	}
 
 	private boolean checkColors(String[] colors) {
-		return (countDifferentColors(colors) > 1) && (countDifferentColors(colors) < 5);
+		return (colors.length > 1) && (colors.length < 5);
 	}
 
 	private boolean checkPassword(String password) {
@@ -122,7 +122,6 @@ public class OPCreateUserHandler extends HttpServlet {
 				counter.add(input.charAt(i));
 			}
 		}
-
 		return counter.size();
 	}
 
@@ -135,16 +134,6 @@ public class OPCreateUserHandler extends HttpServlet {
 			return false;
 		}
 		return true;
-	}
-
-	private static int countDifferentColors(String[] input) {
-		int counter = 0;
-		for (int i = 0; i < input.length; i++) {
-			if (input[i] != null) {
-				counter++;
-			}
-		}
-		return counter;
 	}
 
 	private static byte[] extractPositionsFromString(String input) {
@@ -171,6 +160,7 @@ public class OPCreateUserHandler extends HttpServlet {
 			int colorInt = Integer.parseInt(input[i]);
 			colors += Math.pow(2, colorInt); // dangerous!!
 		}
+		System.out.println("final color: " + colors);
 		return colors;
 	}
 

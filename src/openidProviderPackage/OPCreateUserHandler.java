@@ -3,7 +3,6 @@ package openidProviderPackage;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +16,7 @@ import dbPackage.OPdbConnection;
  * 
  */
 public class OPCreateUserHandler extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 
 	private OPdbConnection dbConnection;
 
@@ -28,13 +28,13 @@ public class OPCreateUserHandler extends HttpServlet {
 		dbConnection = OPdbConnection.getConnection();
 	}
 
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		handlNewUserAttempt(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		handlNewUserAttempt(request, response);
 	}
 
@@ -47,13 +47,15 @@ public class OPCreateUserHandler extends HttpServlet {
 	 *            - The object handling the response back to the user
 	 * @throws IOException
 	 */
-	private void handlNewUserAttempt(HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+	private void handlNewUserAttempt(HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 
 		String userName = request.getParameter("user");
 		String password = request.getParameter("pwd");
-		String positions = request.getParameter("positions"); // not yet in the right format
-		String[] colors = request.getParameterValues("color"); // not yet in the right format
+		String positions = request.getParameter("positions"); // not yet in the
+																// right format
+		String[] colors = request.getParameterValues("color"); // not yet in the
+																// right format
 
 		if (validateAttempt(password, positions, colors)) {
 			byte[] positionsForDB = extractPositionsFromString(positions);
@@ -78,7 +80,7 @@ public class OPCreateUserHandler extends HttpServlet {
 	 *         false
 	 */
 	private boolean validateAttempt(String password, String positions, String[] colors) {
-		if ( checkColors(colors) && checkPassword(password) && checkPositions(positions)) {
+		if (checkColors(colors) && checkPassword(password) && checkPositions(positions)) {
 			return true;
 		} else {
 			return false;
@@ -94,9 +96,7 @@ public class OPCreateUserHandler extends HttpServlet {
 	}
 
 	private boolean checkPositions(String positions) {
-		return (checkIfNumber(positions) && 
-				(countDifferentLettersInString(positions) > 2) && 
-				(countDifferentLettersInString(positions) < 8));
+		return (checkIfNumber(positions) && (countDifferentLettersInString(positions) > 2) && (countDifferentLettersInString(positions) < 8));
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class OPCreateUserHandler extends HttpServlet {
 	private static int countDifferentLettersInString(String input) {
 		ArrayList<Character> counter = new ArrayList<Character>();
 
-		for (int i=0; i<input.length(); i++) {
+		for (int i = 0; i < input.length(); i++) {
 			if (!counter.contains(input.charAt(i))) {
 				counter.add(input.charAt(i));
 			}
@@ -139,7 +139,7 @@ public class OPCreateUserHandler extends HttpServlet {
 
 	private static int countDifferentColors(String[] input) {
 		int counter = 0;
-		for (int i=0; i<input.length; i++) {
+		for (int i = 0; i < input.length; i++) {
 			if (input[i] != null) {
 				counter++;
 			}
@@ -149,7 +149,7 @@ public class OPCreateUserHandler extends HttpServlet {
 
 	private static byte[] extractPositionsFromString(String input) {
 		byte[] positionsInBytes = { 0, 0, 0 };
-		
+
 		// discards leading + if there is one
 		if (input.charAt(0) == '+') {
 			input = input.substring(1);
@@ -167,9 +167,11 @@ public class OPCreateUserHandler extends HttpServlet {
 
 	private static byte extractColorsFromStringArray(String[] input) {
 		byte colors = 0;
-		for (int i=0; i<input.length; i++) {
-			colors += 2^Integer.parseInt(input[i]); // dangerous!!			
+		for (int i = 0; i < input.length; i++) {
+			int colorInt = Integer.parseInt(input[i]);
+			colors += Math.pow(2, colorInt); // dangerous!!
 		}
 		return colors;
 	}
+
 }

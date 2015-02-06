@@ -25,7 +25,6 @@ import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
-import dbPackage.OPdbConnection;
 import relyingPartypackage.RPAuthRespHandler;
 import relyingPartypackage.RPLogin;
 import webSocketPackage.Chatroom;

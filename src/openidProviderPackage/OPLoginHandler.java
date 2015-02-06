@@ -1,6 +1,7 @@
 package openidProviderPackage;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -49,15 +50,21 @@ public class OPLoginHandler extends HttpServlet {
 	private void handlLoginAttempt(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 
-		String userName = request.getPathInfo().substring(1);
+		String userName = request.getParameter("username");
 		String answer = request.getParameter("answer");
 
+		String redirect;
 		if (validateLogin(userName, answer)) {
 			setOPSession(request, userName);
-			response.sendRedirect("/OPViews/loggedIn.html");
+			redirect = "/OPViews/loggedIn.html";
 		} else {
-			response.sendRedirect("/OPViews/logIn.html");
+			redirect = "/OPViews/logIn.html";
 		}
+
+		response.setContentType("application/json");
+		PrintWriter out = response.getWriter();
+		out.print("{\"redirect\": \"" + redirect + "\"}");
+		out.flush();
 	}
 
 	/**

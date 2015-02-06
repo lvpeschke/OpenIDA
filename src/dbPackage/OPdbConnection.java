@@ -1,6 +1,5 @@
 package dbPackage;
 
-import java.io.Console;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.Connection;
@@ -10,8 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
-
-import javax.swing.text.Position;
 
 import com.nimbusds.oauth2.sdk.ParseException;
 import com.nimbusds.oauth2.sdk.id.ClientID;
@@ -191,8 +188,6 @@ public class OPdbConnection {
 	 * @return - If at least one user with that password and username exists
 	 */
 	public boolean validateUserAuthentication(String username, String answer) {
-		System.out.println(username);
-		System.out.println(answer);
 		ResultSet rs = null;
 		PreparedStatement pst = null;
 		Connection connection = null;

@@ -70,7 +70,9 @@ public class OPLoginHandler extends HttpServlet {
 	 * @return
 	 */
 	private boolean validateLogin(String username, String answer) {
-		return dbConnection.validateUserAuthentication(username, answer);
+		boolean result = dbConnection.validateUserAuthentication(username, answer);
+		dbConnection.deleteExpectedAnswer(username);
+		return result;
 	}
 
 	/**

@@ -63,6 +63,10 @@ public class Challenge {
 				answer = addLetterForAllCorrespondingSquares(user, answer, i, j);
 			}
 		}
+		
+		if (answer.isEmpty()) {
+			answer = user.getPassword();
+		}
 		return answer;
 	}
 
@@ -96,5 +100,4 @@ public class Challenge {
 		}
 		return false;
 	}
-
 }

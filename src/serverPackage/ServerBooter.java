@@ -83,7 +83,7 @@ public class ServerBooter {
 
 		try {
 			server.start();
-			server.join();
+													server.join();
 		} catch (Exception e) {
 			System.out.println("Server crashed while starting");
 		}

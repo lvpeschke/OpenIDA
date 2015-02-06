@@ -51,7 +51,7 @@ public class OPChallengeGenerator extends HttpServlet {
 		try {
 			User user = dbConnection.getUserInfo(username);
 			String answer = c.resolveFor(user);
-			dbConnection.saveExpectedAnswerOfUser(username, answer);
+			dbConnection.saveExpectedAnswerOfUser(username, answer.toUpperCase());
 		} catch (UserNotFoundException e) {
 			// do nothing
 		}

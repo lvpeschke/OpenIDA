@@ -37,7 +37,7 @@
 
 \usepackage{enumerate}
 \usepackage{enumitem}
-\setlist[itemize]{noitemsep, topsep=0pt}
+\setlist[itemize]{noitemsep, topsep=0pt, label={---}}
 \usepackage{todonotes}
 %\usepackage{relsize}
 
@@ -106,6 +106,7 @@ The parameters among which the user has to choose are:
 \item password: \texttt{password}
 \end{itemize}
 When presented with a randomly generated challenge as presented in Figure~\ref{fig:ex1}, the user has to select the squares containing A, I, and X. His answer will be any permutation of \texttt{aix}.
+\todo[inline]{any order or not for the letters?}
 \begin{figure}
 \centering
 \begin{tikzpicture}
@@ -131,11 +132,10 @@ When presented with a randomly generated challenge as presented in Figure~\ref{f
 \paragraph{Risk analysis} We chose to draw an attack tree as a risk analysis of our authentication method. The attack goal is to access the chat without a valid account. The entire tree is represented in Figure~\ref{fig:attacktree}.
 We used the labels \textcolor{ForestGreen}{Possible} and \textcolor{BrickRed}{Impossible}, making the assumption that the chat RP, the OpenID OP and the users are on separate machines and servers. We did not use cost or probability estimates, because these would highly depend on the actual usage of the system.
 \todo[inline]{explain tree}
-\todo[inline]{fix deencrypt to decrypt + label in guess password}
 The tree contains the major threats we were able to identify for the system. Two particular items need some explanation.
 \begin{itemize}
-\item All the possibilities in the subtree ``Log in to chat $\rightarrow$ Get login $+$ password $\rightarrow$ From machine'' are labeled as impossible. Spying on the screen or using a key logger once do not reveal the secret, as each challenge requires a customised response. They become possible however if used repeatedly until a statistical analysis of the data makes it possible to deduce the secret. The impossible label in this case stands for an effort we have estimated as too time consuming as it would only reveal a single login. The database is different as it contains all accounts. We have added the leaf ``Decrypt DB'' although it is not encrypted as it is now; because the risk analysis comes to the conclusion that accessing it is already impossible, encrypting it is not needed to make an attack impossible, which is why it can stay unencrypted.
-\item The dictionary attack in the subtree ``Log in to chat $\rightarrow$ Crack the system $\rightarrow$ Guess password'' is labeled as impossible for the same reason as mentioned above: it would require a lot of time due to the repetitions that are necessary to gather useful statistical data. Every password has to be used enough times to make sure that it does not apply to a given user. This effect is however somewhat limited by the fixed length of the password.
+\item All the possibilities in the subtree \texttt{Log in to chat $\rightarrow$ Get login $+$ password $\rightarrow$ From machine} are labeled as impossible. Spying on the screen or using a key logger once do not reveal the secret, as each challenge requires a customised response. They become possible however if used repeatedly until a statistical analysis of the data makes it possible to deduce the secret. The impossible label in this case stands for an effort we have estimated as too time consuming as it would only reveal a single login. The database is different as it contains all accounts. We have added the leaf ``Decrypt DB'' although it is not encrypted as it is now; because the risk analysis comes to the conclusion that accessing it is already impossible, encrypting it is not needed to make an attack impossible, which is why it can stay unencrypted.
+\item The dictionary attack in the subtree \texttt{Log in to chat $\rightarrow$ Crack the system $\rightarrow$ Guess password} is labeled as impossible for the same reason as mentioned above: it would require a lot of time due to the repetitions that are necessary to gather useful statistical data. Every password has to be used enough times to make sure that it does not apply to a given user. This effect is however somewhat limited by the fixed length of the password.
 \end{itemize}
 \begin{figure}
 \centering
@@ -144,7 +144,7 @@ The tree contains the major threats we were able to identify for the system. Two
 \label{fig:attacktree}
 \end{figure}
 As we can see in the tree, the final conclusion is that an intrusion is possible both by acquiring a login and password and by cracking the system. As in most authentication systems, the user itself is a major security threat. We identified bribing and asking (with some social engineering) as the main threats which involve human users. The second major threat is the backdoor.
-We concluded that SQL injection and eavesdropping on the network are both possible. Several methods an mitigate SQL injections: prepared statements and restricted permissions have proven efficient. Despite these measures, we still think of the attack as possible because it primarily concerns our way of handling the database, which may be error-prone.
+We concluded that SQL injection and eavesdropping on the network are both possible. Several methods can mitigate SQL injections: prepared statements and restricted permissions have proven efficient. Despite these measures, we still think of the attack as possible because it primarily concerns our way of handling the database, which may be error-prone.
 The replay attack seemed possible to us due to the lack of tokens in the communication between the user and the OpenID OP.
 
 % compare to passwords
@@ -166,32 +166,40 @@ The replay attack seemed possible to us due to the lack of tokens in the communi
 \label{fig:seqdia}
 \end{figure}
 
+\clearpage
+
 \subsection*{Implementation of an authentication method}
 \paragraph{Overview}
 % how to implement
 
 \paragraph{Database}
-The user table needs to be changed in the database. A column that contains the selected matrix positions and another
-one for the selected colours need to be added.
+The user table \texttt{OPUserTable} needs to be changed in the database.
+An attribute that contains the selected matrix positions and another one for the selected colours need to be added to remember the users credentials.
+An additional attribute has to be there: the expected response value. Once the server issues a challenge, it has to remember what response a given user should send back next. This is stored and deleted as soon as a response from the user is received, whether correct or not, as in both cases the next challenge will be a new one.
 
 \paragraph{User interface}
-The user interface need to have another pages to authenticate. The current authentication page won't have a password
-field and when the username will be submit, another page with the challenge and an answer field would appear. Once the
-answer of the challenge is entered correctly, the current user page will appear and the application will continue as it
-is now.
+The authentication is performed in four steps:
+\begin{itemize}
+\item The user can enter a username;
+\item the server generates a challenge and presents it to the user;
+\item the user enters his response;
+\item the server checks the response and either redirects the user or denies access.
+\end{itemize}
+The user interface needs to have one more page. The first authentication page will only have a username field.  When the username is submitted, another page with the challenge and an answer field will appear. Once the answer to the challenge is entered correctly, the current user page will appear and the application will continue as it is now.
 
 \paragraph{HTML and CSS}
-First of all, on remove the password field from the current login page.
+First of all, we have to remove the password field from the original login page.
 
-After that, another HTML page is needed. A copy of the logIn.html with small modifications will suffice. Only
-instructions for the challenge need to be added with, of course, the challenge image will replace the current username
+After that, another HTML page is needed. A copy of the \texttt{logIn.html} with small modifications will suffice. Instructions for the challenge need to be added with, of course, the challenge image will replace the current username
 field.
 
-Finally, maybe a little CSS will be added for the instructions text and the challenge image.
+Finally, a little CSS will be added for the instructions text and the challenge image.
+
+\todo[inline]{clarify?? modified login + new page with challenge AND modified sign up}
 
 \paragraph{Servlets}
 A new servlet will be added to generate the challenge image. It will generate the challenge and then use the id of the user in the url as input for
-calculating the answer and stock it as the next expected answer in the user.
+calculating the answer based on the user's secret and store it as the next expected answer in the user table of the database.
 
 \paragraph{OpenIDA}
 

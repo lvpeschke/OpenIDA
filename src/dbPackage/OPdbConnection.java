@@ -53,10 +53,10 @@ public class OPdbConnection {
 	private static final String constScope = "scope";
 
 	private static final String constUsername = "userName";
-	private static final String constExpectedAnswer = "expectedAnswer";
-	private static final String constPositions = "positions";
-	private static final String constColors = "colors";
-	private static final String constPassword = "password";
+	private static final String constExpectedAnswer = "expectedAnswer"; // added
+	private static final String constPositions = "positions"; // added
+	private static final String constColors = "colors"; // added
+	private static final String constPassword = "password"; // adapted
 
 	private static final String constOPAuthenticationRequestTable = "OPAuthenticationRequest";
 	private static final String constOPUserTable = "OPUserTable";
@@ -110,8 +110,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out
-						.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 			}
 		}
@@ -137,8 +136,7 @@ public class OPdbConnection {
 			pst.setString(i++, nonce);
 			rs = pst.executeQuery();
 		} catch (SQLException e) {
-			System.out
-					.println("OPdbConnection - ERROR: problem checking if AuthenticationRequest is in db");
+			System.out.println("OPdbConnection - ERROR: problem checking if AuthenticationRequest is in db");
 			e.printStackTrace();
 			return false;
 		} finally {
@@ -150,8 +148,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out
-						.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 				return false;
 			}
@@ -165,8 +162,7 @@ public class OPdbConnection {
 				return false;
 			}
 			if (count != 1) {
-				System.out
-						.println("OPdbConnection - ERROR: Strange amount of AuthenticationRequest");
+				System.out.println("OPdbConnection - ERROR: Strange amount of AuthenticationRequest");
 				return false;
 			}
 		} catch (SQLException e) {
@@ -187,6 +183,7 @@ public class OPdbConnection {
 	 * @param passwor
 	 * @return - If at least one user with that password and username exists
 	 */
+	// adapted
 	public boolean validateUserAuthentication(String username, String answer) {
 		ResultSet rs = null;
 		PreparedStatement pst = null;
@@ -199,7 +196,7 @@ public class OPdbConnection {
 			pst.setString(i++, username);
 			if (answer != null)
 				answer = answer.toUpperCase();
-			pst.setString(i++, answer); // TODO careful with order
+			pst.setString(i++, answer); // TODO careful with order of the letters
 			rs = pst.executeQuery();
 		} catch (SQLException e) {
 			System.out.println("OPdbConnection - ERROR: problem checking if User is in db");
@@ -219,8 +216,7 @@ public class OPdbConnection {
 				return false;
 			}
 		} catch (SQLException e) {
-			System.out
-					.println("OPdbConnection - ERROR: Problem counting the responses from usertable");
+			System.out.println("OPdbConnection - ERROR: Problem counting the responses from usertable");
 			e.printStackTrace();
 			return false;
 		} finally {
@@ -235,14 +231,13 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out
-						.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 				return false;
 			}
 		}
 		/*
-		 * No error and atleast ONE user => return true
+		 * No error and at least ONE user => return true
 		 */
 		return true;
 	}
@@ -270,8 +265,7 @@ public class OPdbConnection {
 			rs = pst.executeQuery();
 			req = getSpecificAuthRequest(rs);
 		} catch (SQLException ex) {
-			System.out
-					.println("OPdbConnection - ERROR: Selecting a specific AuthenticationRequest statement error");
+			System.out.println("OPdbConnection - ERROR: Selecting a specific AuthenticationRequest statement error");
 			ex.printStackTrace();
 			return null;
 		} finally {
@@ -305,8 +299,7 @@ public class OPdbConnection {
 			return null;
 		}
 		if (a != 1) {
-			System.out
-					.println("OPdbConnection - ERROR: Strange ammount of that AuthenticationRequest in DB->"
+			System.out.println("OPdbConnection - ERROR: Strange ammount of that AuthenticationRequest in DB->"
 							+ a);
 			return null;
 		}
@@ -339,8 +332,7 @@ public class OPdbConnection {
 		try {
 			req = AuthenticationRequest.parse(hashMap);
 		} catch (ParseException e) {
-			System.out
-					.println("OPdbConnection - ERROR: Could not create a AuthenticationRequest form the parameters");
+			System.out.println("OPdbConnection - ERROR: Could not create a AuthenticationRequest form the parameters");
 			e.printStackTrace();
 		}
 		return req;
@@ -398,8 +390,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out
-						.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 				return false;
 			}
@@ -440,8 +431,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out
-						.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 				return false;
 			}
@@ -480,8 +470,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out
-						.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 			}
 		}
@@ -525,8 +514,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out
-						.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 				return false;
 			}
@@ -560,7 +548,7 @@ public class OPdbConnection {
 			Class.forName(DRIVER_CLASS);
 
 			// This method may be called after the server has been run
-			// atleast once to remove all trace of the previous work in the
+			// at least once to remove all trace of the previous work in the
 			// database, could be done to make sure the database is not filled
 			// with unessary amount of data
 
@@ -641,6 +629,7 @@ public class OPdbConnection {
 	/**
 	 * A method to create the UserTable
 	 */
+	// adapted
 	private void createUserTable() { //TODO: take car of the bit/byte situation
 		System.out.println("Creating userTable");
 		Statement stmt = null;
@@ -648,7 +637,7 @@ public class OPdbConnection {
 
 		String sql = "CREATE TABLE IF NOT EXISTS " + constOPUserTable + " " + "(" + constUsername
 				+ " VARCHAR(255), " + " " + constExpectedAnswer + " VARCHAR(12), " + constPositions
-				+ " BINARY(3), " + constColors + " BINARY(1), " + constPassword + " VARCHAR(12), "
+				+ " INT(3), " + constColors + " INT, " + constPassword + " VARCHAR(12), "
 				+ constUserPicture + " mediumblob, " + " PRIMARY KEY ( " + constUsername + " ))";
 		try {
 			connection = getDBConnection();
@@ -770,8 +759,7 @@ public class OPdbConnection {
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out
-					.println("OPdbConnection - ERROR: problem saving the ClientID - Probably already exists");
+			System.out.println("OPdbConnection - ERROR: problem saving the ClientID - Probably already exists");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -782,8 +770,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out
-						.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 			}
 		}
@@ -791,14 +778,15 @@ public class OPdbConnection {
 
 	/**
 	 * Creates a row in the UserTable which will contain the 'user':
-	 * username='qwe' & password='asd'
+	 * username='qwe' & password='asd' & matrix positions='(1,1)(1,2)(1,3)' & colors='green,red,blue'
 	 */
+	// adapted
 	private void putDefaultUserInTable() {
 
 		String username = "qwe";
 		String password = "asd";
-		byte[] positions = new byte[]{7, 0, 0}; // first row
-		byte colors = 28; // green 2^4, red 2^3, blue 2^2
+		int positions = 7;
+		int colors = 28; // 4 + 8 + 16
 		saveNewUser(username, password, positions, colors);
 	}
 
@@ -848,7 +836,8 @@ public class OPdbConnection {
 	 * @param positions
 	 * @param colors
 	 */
-	public void saveNewUser(String username, String password, byte[] positions, byte colors) {
+	// adapted
+	public void saveNewUser(String username, String password, int positions, int colors) {
 
 		int i = 1;
 		PreparedStatement pst = null;
@@ -862,14 +851,13 @@ public class OPdbConnection {
 
 			pst.setString(i++, username);
 			pst.setNull(i++, java.sql.Types.VARCHAR);
-			pst.setBytes(i++, positions);
-			pst.setByte(i++, colors);
+			pst.setInt (i++, positions);
+			pst.setInt(i++, colors);
 			pst.setString(i++, password);
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out
-					.println("OPdbConnection - ERROR: problem saving the User - Probably already exists");
+			System.out.println("OPdbConnection - ERROR: problem saving the User - Probably already exists");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -880,8 +868,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out
-						.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 			}
 		}
@@ -966,6 +953,13 @@ public class OPdbConnection {
 		}
 	}
 
+	/**
+	 * Returns a the user information as a User object.
+	 * 
+	 * @param username
+	 * @return
+	 */
+	// added
 	public User getUserInfo(String username) {
 
 		ResultSet rs = null;
@@ -982,14 +976,15 @@ public class OPdbConnection {
 			pst.setString(1, username);
 			rs = pst.executeQuery();
 
-			byte[] positions;
+			// TODO convert from int to bool now
+			int positions;
 			if (rs.next()) {
-				positions = rs.getBytes(constPositions);
-				byte colors = rs.getByte(constColors);
+				positions = rs.getInt(constPositions);
+				int colors = rs.getInt(constColors);
 				String password = rs.getString(constPassword);
 
-				boolean[] colorsBool = UserSecretHandler.colorsByteToBool(colors);
-				boolean[][] positionsBool = UserSecretHandler.positionsByteToBool(positions);
+				boolean[] colorsBool = UserSecretHandler.colorsIntToBool(colors);
+				boolean[][] positionsBool = UserSecretHandler.positionsIntToBool(positions);
 				userInfo = new User(username, positionsBool, colorsBool, password);
 			} else {
 				throw new UserNotFoundException(username);
@@ -1005,6 +1000,13 @@ public class OPdbConnection {
 		return userInfo;
 	}
 
+	/**
+	 * Stores an expected response for a given user in the database
+	 * 
+	 * @param username
+	 * @param answer
+	 */
+	// added
 	public void saveExpectedAnswerOfUser(String username, String answer) {
 		if (username == null) {
 			return;
@@ -1034,18 +1036,30 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out
-						.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 			}
 		}
 	}
 
+	/**
+	 * Deletes an expected response from the database for a given user
+	 * 
+	 * @param username
+	 */
 	public void deleteExpectedAnswer(String username) {
 		saveExpectedAnswerOfUser(username, null);
 
 	}
 
+	/**
+	 * Close the connection to the database
+	 * 
+	 * @param rs
+	 * @param pst
+	 * @param connection
+	 */
+	// adapted
 	private void closeConnection(ResultSet rs, PreparedStatement pst, Connection connection) {
 		try {
 			if (pst != null) {

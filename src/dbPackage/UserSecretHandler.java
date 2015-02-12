@@ -1,5 +1,10 @@
 package dbPackage;
 
+/**
+ * Static methods needed for conversion between the DB and Java
+ *
+ */
+// added
 public class UserSecretHandler {
 
 	/**

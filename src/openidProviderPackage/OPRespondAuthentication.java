@@ -175,6 +175,7 @@ public class OPRespondAuthentication extends HttpServlet {
 		jwtClaims.setIssuer(issuerName);
 		jwtClaims.setSubject(userName);
 		List<String> aud = new ArrayList<>();
+		System.out.println(req.getClientID().toString()); //TODO
 		aud.add(req.getClientID().toString());
 		jwtClaims.setAudience(aud);
 		jwtClaims.setExpirationTime(new Date(

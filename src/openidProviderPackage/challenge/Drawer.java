@@ -6,6 +6,11 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+/**
+ * Class needed to display the challenge
+ * 
+ */
+// added
 public class Drawer {
 
 	private static final int IMAGE_SIZE = 200;
@@ -32,7 +37,6 @@ public class Drawer {
 		drawTicTacToe(g);
 
 		drawSquares(g, c);
-
 	}
 
 	private void drawSquares(Graphics2D g, Challenge c) {

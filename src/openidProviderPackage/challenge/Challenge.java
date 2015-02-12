@@ -2,6 +2,10 @@ package openidProviderPackage.challenge;
 
 import dbPackage.User;
 
+/**
+ * The challenge object
+ */
+// added
 public class Challenge {
 
 	private static final int MIN_FILLED_SQUARE = 3;

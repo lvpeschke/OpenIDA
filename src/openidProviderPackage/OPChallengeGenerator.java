@@ -15,8 +15,9 @@ import dbPackage.User;
 import dbPackage.UserNotFoundException;
 
 /**
- * This class generate the challenge for the authentication
+ * This class generates the challenge for the authentication
  */
+// added
 public class OPChallengeGenerator extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private OPdbConnection dbConnection;

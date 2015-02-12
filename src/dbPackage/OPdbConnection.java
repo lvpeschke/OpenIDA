@@ -630,7 +630,7 @@ public class OPdbConnection {
 	 * A method to create the UserTable
 	 */
 	// adapted
-	private void createUserTable() { //TODO: take car of the bit/byte situation
+	private void createUserTable() {
 		System.out.println("Creating userTable");
 		Statement stmt = null;
 		Connection connection = null;
@@ -778,14 +778,14 @@ public class OPdbConnection {
 
 	/**
 	 * Creates a row in the UserTable which will contain the 'user':
-	 * username='qwe' & password='asd' & matrix positions='(1,1)(1,2)(1,3)' & colors='green,red,blue'
+	 * username='qwe' & password='qweasd' & matrix positions='(1,1)(1,2)(1,3)' & colors='green,red,blue'
 	 */
 	// adapted
 	private void putDefaultUserInTable() {
 
 		String username = "qwe";
-		String password = "asd";
-		int positions = 7;
+		String password = "qweasd";
+		int positions = 7; // 1 + 2 + 4
 		int colors = 28; // 4 + 8 + 16
 		saveNewUser(username, password, positions, colors);
 	}
@@ -976,11 +976,12 @@ public class OPdbConnection {
 			pst.setString(1, username);
 			rs = pst.executeQuery();
 
-			// TODO convert from int to bool now
+			// convert from int to bool
 			int positions;
+			int colors;
 			if (rs.next()) {
 				positions = rs.getInt(constPositions);
-				int colors = rs.getInt(constColors);
+				colors = rs.getInt(constColors);
 				String password = rs.getString(constPassword);
 
 				boolean[] colorsBool = UserSecretHandler.colorsIntToBool(colors);
@@ -990,6 +991,7 @@ public class OPdbConnection {
 				throw new UserNotFoundException(username);
 			}
 			System.out.println("positions: " + positions);
+			System.out.println("colors: " + colors);
 
 		} catch (SQLException ex) {
 			System.out.println("OPdbConnection - ERROR: Select statement error");
@@ -1008,6 +1010,8 @@ public class OPdbConnection {
 	 */
 	// added
 	public void saveExpectedAnswerOfUser(String username, String answer) {
+		System.out.println("saveExpectedAnswerOfUser invoked for user - answer: " + username + " - " + answer);
+		
 		if (username == null) {
 			return;
 		}
@@ -1047,9 +1051,10 @@ public class OPdbConnection {
 	 * 
 	 * @param username
 	 */
+	// added
 	public void deleteExpectedAnswer(String username) {
+		System.out.println("saveExpectedAnswerOfUser invoked for user: " + username);
 		saveExpectedAnswerOfUser(username, null);
-
 	}
 
 	/**

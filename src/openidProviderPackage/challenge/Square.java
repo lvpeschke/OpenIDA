@@ -1,5 +1,10 @@
 package openidProviderPackage.challenge;
 
+/**
+ * Class holding the matrix information
+ *
+ */
+// added
 public class Square {
 
 	private boolean isFilled;

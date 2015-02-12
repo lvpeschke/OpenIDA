@@ -49,6 +49,8 @@ public class OPLoginHandler extends HttpServlet {
 	 */
 	private void handlLoginAttempt(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
+		
+		System.out.println("handlLoginAttempt invoked");
 
 		String userName = request.getParameter("username");
 		String answer = request.getParameter("answer");

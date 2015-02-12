@@ -47,15 +47,14 @@ public class OPCreateUserHandler extends HttpServlet {
 	 *            - The object handling the response back to the user
 	 * @throws IOException
 	 */
+	// adapted
 	private void handlNewUserAttempt(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 
 		String userName = request.getParameter("user");
 		String password = request.getParameter("pwd");
-		String positions = request.getParameter("positions"); // not yet in the
-		// right format
-		String[] colors = request.getParameterValues("color"); // not yet in the
-		// right format
+		String positions = request.getParameter("positions"); // not yet in the right format
+		String[] colors = request.getParameterValues("color"); // not yet in the right format
 
 		if (validateAttempt(password, positions, colors)) {
 			int positionsForDB = extractPositionsFromStringToInt(positions);
@@ -79,6 +78,7 @@ public class OPCreateUserHandler extends HttpServlet {
 	 * @return - Returns true if the passwords are demed correct, otherwise
 	 *         false
 	 */
+	// adapted
 	private boolean validateAttempt(String password, String positions, String[] colors) {
 		if (checkColors(colors) && checkPassword(password) && checkPositions(positions)) {
 			return true;
@@ -87,14 +87,32 @@ public class OPCreateUserHandler extends HttpServlet {
 		}
 	}
 
+	/**
+	 * Checks that 2-4 colors are chosen
+	 * 
+	 * @param colors
+	 * @return
+	 */
 	private boolean checkColors(String[] colors) {
 		return (colors.length > 1) && (colors.length < 5);
 	}
 
+	/**
+	 * Checks that the password has 4 different letters and at most 12 characters
+	 * 
+	 * @param password
+	 * @return
+	 */
 	private boolean checkPassword(String password) {
 		return (password.length() < 13) && (countDifferentLettersInString(password) > 3);
 	}
 
+	/**
+	 * Checks that 3-7 positions are chosen
+	 * 
+	 * @param positions
+	 * @return
+	 */
 	private boolean checkPositions(String positions) {
 		return (checkIfNumber(positions) && (countDifferentLettersInString(positions) > 2) && (countDifferentLettersInString(positions) < 8));
 	}
@@ -118,15 +136,20 @@ public class OPCreateUserHandler extends HttpServlet {
 	 * Count the number of different characters in a string
 	 * 
 	 * @param input
-	 * @return
+	 * @return -1 if input contains no-letter-characters or the number of different letters
 	 */
-	//TODO make sure only letters
 	private static int countDifferentLettersInString(String input) {
 		ArrayList<Character> counter = new ArrayList<Character>();
 
 		for (int i = 0; i < input.length(); i++) {
-			if (!counter.contains(input.charAt(i))) {
-				counter.add(input.charAt(i));
+			char temp = input.charAt(i);
+			// return immediately if not a letter
+			if (Character.isLetter(temp)) {
+				return -1;
+			}
+			// add the letter to the counter
+			if (!counter.contains(temp)) {
+				counter.add(temp);
 			}
 		}
 		return counter.size();
@@ -191,6 +214,7 @@ public class OPCreateUserHandler extends HttpServlet {
 			number--;
 			positionsInInt += ((int) Math.pow(2.0, number));
 		}
+		System.out.println("final positions: " + positionsInInt);
 		return positionsInInt;
 	}
 

@@ -395,6 +395,7 @@ public class OPdbConnection {
 				return false;
 			}
 		}
+		System.out.println("validateCLientID found in DB, valid request");
 		return true;
 	}
 

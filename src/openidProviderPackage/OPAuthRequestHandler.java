@@ -109,6 +109,7 @@ public class OPAuthRequestHandler extends HttpServlet {
 	 * @return
 	 */
 	private boolean validateAuthenticatonRequest(AuthenticationRequest req) {
+		System.out.println("validateAuthenticatonRequest invoked");
 		boolean isValid = false;
 		String responseType = req.getResponseType().toString();
 

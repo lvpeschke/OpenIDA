@@ -145,6 +145,7 @@ public class ServerBooter {
 	 * 
 	 * @return
 	 */
+	// adapted
 	private ServletContextHandler generateRESTApi() {
 
 		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);

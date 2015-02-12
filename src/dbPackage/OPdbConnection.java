@@ -41,8 +41,8 @@ public class OPdbConnection {
 
 	// database on my laptop
 	private String url = "jdbc:mysql://localhost:3306/openida";
-	private String user = "root"; // LiU ID
-	private String password = ""; // MySQL password
+	private String user = "root";
+	private String password = "";
 	// -------------
 	private static final String DRIVER_CLASS = "com.mysql.jdbc.Driver";
 	private static final String constRedirectURI = "redirect_uri";
@@ -196,7 +196,7 @@ public class OPdbConnection {
 			pst.setString(i++, username);
 			if (answer != null)
 				answer = answer.toUpperCase();
-			pst.setString(i++, answer); // TODO careful with order of the letters
+			pst.setString(i++, answer); // TODO careful with the order of the letters
 			rs = pst.executeQuery();
 		} catch (SQLException e) {
 			System.out.println("OPdbConnection - ERROR: problem checking if User is in db");
@@ -524,6 +524,12 @@ public class OPdbConnection {
 		return isLoggedIn;
 	}
 
+	/**
+	 * Checks so that one and only one user exists in the resultset
+	 * 
+	 * @param rs
+	 * @return
+	 */
 	private boolean checkIfUserIsLoggedIn(ResultSet rs) {
 		int rowCount = 0;
 		try {
@@ -636,6 +642,7 @@ public class OPdbConnection {
 		Statement stmt = null;
 		Connection connection = null;
 
+		// The user table contains the whole secret and the expected answer during log in.
 		String sql = "CREATE TABLE IF NOT EXISTS " + constOPUserTable + " " + "(" + constUsername
 				+ " VARCHAR(255), " + " " + constExpectedAnswer + " VARCHAR(12), " + constPositions
 				+ " INT(3), " + constColors + " INT, " + constPassword + " VARCHAR(12), "
@@ -1005,6 +1012,7 @@ public class OPdbConnection {
 
 	/**
 	 * Stores an expected response for a given user in the database
+	 * The answer is valid during one log in session.
 	 * 
 	 * @param username
 	 * @param answer

@@ -29,9 +29,9 @@ public class RPdbConnection {
 	// assistant.
 	// If you have forgotten your database password, you can get a new one here:
 	// https://www.ida.liu.se/local/students/mysql/passwd.en.shtml
-//	private String url = "jdbc:mysql://db-und.ida.liu.se/guila302";
-//	private String user = "guila302"; // LiU ID
-//	private String password = "guila3028057"; // MySQL password
+	//	private String url = "jdbc:mysql://db-und.ida.liu.se/guila302";
+	//	private String user = "guila302"; // LiU ID
+	//	private String password = "guila3028057"; // MySQL password
 
 	// database on my laptop
 	private String url = "jdbc:mysql://localhost:3306/openida";

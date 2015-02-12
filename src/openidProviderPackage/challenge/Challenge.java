@@ -13,10 +13,18 @@ public class Challenge {
 
 	private Square[][] matrix;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param matrix
+	 */
 	public Challenge(Square[][] matrix) {
 		this.matrix = matrix;
 	}
 
+	/**
+	 * Constructor that initializes the matrix and randomly fills it
+	 */
 	public Challenge() {
 		matrix = new Square[3][3];
 
@@ -24,6 +32,9 @@ public class Challenge {
 		fillSomeSquares();
 	}
 
+	/**
+	 * Randomly fill the squares of the challenge matrix
+	 */
 	private void fillSomeSquares() {
 		long nbFilledSquares = Math.round(Math.random() * (MAX_FILLED_SQUARE - MIN_FILLED_SQUARE))
 				+ MIN_FILLED_SQUARE;
@@ -34,6 +45,11 @@ public class Challenge {
 		}
 	}
 
+	/**
+	 * Randomly select a square in the challenge matrix
+	 * 
+	 * @return
+	 */
 	private Square selectRandomEmptySquare() {
 		int x;
 		int y;
@@ -46,6 +62,9 @@ public class Challenge {
 		return matrix[x][y];
 	}
 
+	/**
+	 * Initialize the challenge matrix with empty squares
+	 */
 	private void fillMatrixWithEmptySquare() {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
@@ -54,17 +73,30 @@ public class Challenge {
 		}
 	}
 
+	/**
+	 * Get a square inside the challenge matrix
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public Square getSquare(int x, int y) {
 		return matrix[x][y];
 	}
 
-	// be careful with order of letters
+	/**
+	 * Get the challenge's answer for a given user
+	 * 
+	 * @param user
+	 * @return
+	 */
 	public String resolveFor(User user) {
 		String answer = "";
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				answer = addLetterForAllCorrespondingSquares(user, answer, i, j);
+				// be careful with order of letters
 			}
 		}
 		
@@ -74,6 +106,16 @@ public class Challenge {
 		return answer;
 	}
 
+	/**
+	 * Conditionally add a letter from a square from the challenge matrix to
+	 * the answer string if it matches the user's secret
+	 * 
+	 * @param user
+	 * @param answer
+	 * @param i
+	 * @param j
+	 * @return
+	 */
 	private String addLetterForAllCorrespondingSquares(User user, String answer, int i, int j) {
 		Square square = matrix[i][j];
 
@@ -86,6 +128,16 @@ public class Challenge {
 		return answer;
 	}
 
+	/**
+	 * Determine whether a square from the challenge marix should be a part of the
+	 * answer based on a user's secret (positions, colors, letters)
+	 * 
+	 * @param square
+	 * @param i
+	 * @param j
+	 * @param user
+	 * @return
+	 */
 	private boolean isSquareCorrespondToUserChoices(Square square, int i, int j, User user) {
 		boolean[][] positions = user.getPositions();
 		boolean[] colors = user.getColors();

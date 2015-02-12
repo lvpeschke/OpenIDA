@@ -30,11 +30,13 @@ public class OPLoginHandler extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println("doGet in LoginHandler!!");
 		handlLoginAttempt(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println("doPost in LoginHandler!!");
 		handlLoginAttempt(request, response);
 	}
 
@@ -47,6 +49,7 @@ public class OPLoginHandler extends HttpServlet {
 	 *            - The object handling the response back to the user
 	 * @throws IOException
 	 */
+	// adapted
 	private void handlLoginAttempt(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		
@@ -78,8 +81,10 @@ public class OPLoginHandler extends HttpServlet {
 	 *            - The users password
 	 * @return
 	 */
+	// adapted
 	private boolean validateLogin(String username, String answer) {
 		boolean result = dbConnection.validateUserAuthentication(username, answer);
+		// delete the expected answer from the DB: no matter what, the challenge is over
 		dbConnection.deleteExpectedAnswer(username);
 		return result;
 	}

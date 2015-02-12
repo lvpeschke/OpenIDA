@@ -57,11 +57,13 @@ public class OPCreateUserHandler extends HttpServlet {
 		String[] colors = request.getParameterValues("color"); // not yet in the right format
 
 		if (validateAttempt(password, positions, colors)) {
+			// save user to the DB
 			int positionsForDB = extractPositionsFromStringToInt(positions);
 			int colorsForDB = extractColorsFromStringArrayToInt(colors);
-
 			dbConnection.saveNewUser(userName, password, positionsForDB, colorsForDB);
+			// log the user in
 			setOPSession(request, userName);
+			// redirect
 			response.sendRedirect("/OPViews/loggedIn.html");
 		} else {
 			response.sendRedirect("/OPViews/logIn.html");
@@ -93,6 +95,7 @@ public class OPCreateUserHandler extends HttpServlet {
 	 * @param colors
 	 * @return
 	 */
+	// added
 	private boolean checkColors(String[] colors) {
 		return (colors.length > 1) && (colors.length < 5);
 	}
@@ -103,6 +106,7 @@ public class OPCreateUserHandler extends HttpServlet {
 	 * @param password
 	 * @return
 	 */
+	// added
 	private boolean checkPassword(String password) {
 		return (password.length() < 13) && (countDifferentLettersInString(password) > 3);
 	}
@@ -113,8 +117,11 @@ public class OPCreateUserHandler extends HttpServlet {
 	 * @param positions
 	 * @return
 	 */
+	// added
 	private boolean checkPositions(String positions) {
-		return (checkIfNumber(positions) && (countDifferentLettersInString(positions) > 2) && (countDifferentLettersInString(positions) < 8));
+		return checkIfNumber(positions) &&
+			   (countDifferentLettersInString(positions) > 2) &&
+			   (countDifferentLettersInString(positions) < 8);
 	}
 
 	/**
@@ -138,6 +145,7 @@ public class OPCreateUserHandler extends HttpServlet {
 	 * @param input
 	 * @return -1 if input contains no-letter-characters or the number of different letters
 	 */
+	// added
 	private static int countDifferentLettersInString(String input) {
 		ArrayList<Character> counter = new ArrayList<Character>();
 
@@ -161,6 +169,7 @@ public class OPCreateUserHandler extends HttpServlet {
 	 * @param input
 	 * @return
 	 */
+	// added
 	private static boolean checkIfNumber(String input) {
 		try {
 			if (Integer.parseInt(input) < 0) {
@@ -199,6 +208,7 @@ public class OPCreateUserHandler extends HttpServlet {
 	 * @return
 	 */
 	// TODO check math
+	// added
 	private static int extractPositionsFromStringToInt(String input) {
 
 		int positionsInInt = 0;
@@ -237,6 +247,7 @@ public class OPCreateUserHandler extends HttpServlet {
 	 * @return
 	 */
 	// TODO check math
+	// added
 	private static int extractColorsFromStringArrayToInt(String[] input) {
 		int colors = 0;
 		for (int i = 0; i < input.length; i++) {

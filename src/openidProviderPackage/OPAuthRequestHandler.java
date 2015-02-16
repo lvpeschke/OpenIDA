@@ -32,11 +32,13 @@ public class OPAuthRequestHandler extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("doGet in OPAuthRequest invoked!!!");
 		handleNewAuthRequest(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("doPost in OpAuthRequest invoked!!!");
 		handleNewAuthRequest(request, response);
 	}
 

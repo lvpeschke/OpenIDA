@@ -50,11 +50,13 @@ public class OPRespondAuthentication extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("doGet in OPRespondAuthentication invoked!!!");
 		createAuthenticationSuccessResponse(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("doPost in OPRespondAuthentication invoked!!!");
 		createAuthenticationSuccessResponse(request, response);
 	}
 

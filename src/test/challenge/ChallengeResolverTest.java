@@ -9,6 +9,11 @@ import org.junit.Test;
 
 import dbPackage.User;
 
+/**
+ * Tast class to make sure the challenge accepts the correct answer.
+ * Automated with JUnit
+ *
+ */
 public class ChallengeResolverTest {
 
 	private Challenge someChallenge;

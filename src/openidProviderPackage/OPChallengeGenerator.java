@@ -39,6 +39,9 @@ public class OPChallengeGenerator extends HttpServlet {
 		Challenge c = new Challenge();
 
 		String username = request.getPathInfo();
+		
+		System.out.println("in request user is: " + username);
+		
 		putExpectedAnswerIntoDB(c, username);
 
 		setResponse(response, c);
@@ -65,10 +68,10 @@ public class OPChallengeGenerator extends HttpServlet {
 	 * @param username
 	 */
 	private void putExpectedAnswerIntoDB(Challenge c, String username) {
-		System.out.println("putExpectedAnswerIntoDB invoked");
 		try {
 			User user = dbConnection.getUserInfo(username);
 			String answer = c.resolveFor(user);
+			System.out.println("putExpectedAnswerIntoDB invoked: answer");
 			dbConnection.saveExpectedAnswerOfUser(username, answer.toUpperCase());
 		} catch (UserNotFoundException e) {
 			// do nothing

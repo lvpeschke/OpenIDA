@@ -83,6 +83,7 @@ public class OPLoginHandler extends HttpServlet {
 	 */
 	// adapted
 	private boolean validateLogin(String username, String answer) {
+		System.out.println("validateLogin...");
 		boolean result = dbConnection.validateUserAuthentication(username, answer);
 		// delete the expected answer from the DB: no matter what, the challenge is over
 		dbConnection.deleteExpectedAnswer(username);

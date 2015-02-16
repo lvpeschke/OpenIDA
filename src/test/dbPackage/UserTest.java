@@ -4,7 +4,7 @@ import org.junit.Test;
 
 public class UserTest {
 
-	// TODO test User
+	// TODO test User delete
 	@Test
 	public void someTest() {
 

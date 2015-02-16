@@ -6,6 +6,9 @@ import openidProviderPackage.challenge.Square;
 
 import org.junit.Test;
 
+/**
+ * Test class to make sure the challenge is well-formed.
+ */
 public class ChallengeTest {
 
 	@Test
@@ -30,5 +33,4 @@ public class ChallengeTest {
 		}
 		return filledSquare;
 	}
-
 }

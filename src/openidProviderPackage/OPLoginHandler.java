@@ -55,8 +55,10 @@ public class OPLoginHandler extends HttpServlet {
 		
 		System.out.println("handlLoginAttempt invoked");
 
-		String userName = request.getParameter("username");
+		String userName = request.getParameter("user-login2");
 		String answer = request.getParameter("answer");
+		
+		System.out.println("user2 - answer: " + userName + ", " + answer);
 
 		String redirect;
 		if (validateLogin(userName, answer)) {

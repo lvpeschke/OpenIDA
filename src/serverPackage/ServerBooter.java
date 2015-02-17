@@ -176,7 +176,7 @@ public class ServerBooter {
 		context.addServlet(new ServletHolder(new OPLogOut()), "/OpenIdProvider/OPLogOut/*");
 
 		context.addServlet(new ServletHolder(new OPChallengeGenerator()),
-				"/OpenIdProvider/challenge/*"); // Added one
+				"/OpenIdProvider/OPChallenge/*"); // Added one
 
 		return context;
 	}

@@ -30,11 +30,13 @@ public class OPCreateUserHandler extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println("doGet in CreateUser invoked!!!");
 		handlNewUserAttempt(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println("doPost in CreateUser invoked!!!");
 		handlNewUserAttempt(request, response);
 	}
 
@@ -52,12 +54,16 @@ public class OPCreateUserHandler extends HttpServlet {
 			throws IOException {
 
 		String userName = request.getParameter("user");
+		System.out.println("user :" + userName);
 		String password = request.getParameter("pwd");
+		System.out.println("pwd :" + password);
 		String positions = request.getParameter("positions"); // not yet in the right format
+		System.out.println("pos :" + positions);
 		String[] colors = request.getParameterValues("color"); // not yet in the right format
 
 		if (validateAttempt(password, positions, colors)) {
 			// save user to the DB
+			System.out.println("handlNewUserAttempt - passed test");
 			int positionsForDB = extractPositionsFromStringToInt(positions);
 			int colorsForDB = extractColorsFromStringArrayToInt(colors);
 			dbConnection.saveNewUser(userName, password, positionsForDB, colorsForDB);

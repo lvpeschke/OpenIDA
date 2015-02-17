@@ -22,6 +22,9 @@ public class OPChallengeGenerator extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private OPdbConnection dbConnection;
 	private Drawer drawer;
+	
+	// make username globally available
+	private String receivedUserName = null;
 
 	/**
 	 * Create a connection to the database
@@ -32,19 +35,35 @@ public class OPChallengeGenerator extends HttpServlet {
 		drawer = new Drawer();
 	}
 
+	// used when the server sends the challenge to the browser (get-response)
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		System.out.println("doGet in ChallengeGenerator invoked!!!");
 
 		Challenge c = new Challenge();
 
-		String username = request.getPathInfo();
+		//String username = request.getPathInfo();
+		//String requestString = request.toString();
+		//String username = request.getParameter("user");
+		//System.out.println("in request user is: " + username);
+		//System.out.println("the request is: " + requestString);
 		
-		System.out.println("in request user is: " + username);
-		
-		putExpectedAnswerIntoDB(c, username);
+		putExpectedAnswerIntoDB(c, receivedUserName);
+		receivedUserName = null;
 
 		setResponse(response, c);
+	}
+	
+	// used when the browser posts the username
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		System.out.println("doPost in ChallengeGenerator invoked!!!");
+		
+		String username = request.getParameter("user-login");
+		System.out.println("in request user is: " + username);
+		
+		// set the username to make it accessible globally
+		receivedUserName = username;
 	}
 
 	/**
@@ -68,12 +87,14 @@ public class OPChallengeGenerator extends HttpServlet {
 	 * @param username
 	 */
 	private void putExpectedAnswerIntoDB(Challenge c, String username) {
+		System.out.println("putExpectedAnswerIntoDB invoked, answer should follow");
 		try {
 			User user = dbConnection.getUserInfo(username);
 			String answer = c.resolveFor(user);
-			System.out.println("putExpectedAnswerIntoDB invoked: answer");
+			System.out.println("answer: " + answer);
 			dbConnection.saveExpectedAnswerOfUser(username, answer.toUpperCase());
 		} catch (UserNotFoundException e) {
+			System.out.println("exception: " + e.getMessage());
 			// do nothing
 		}
 	}

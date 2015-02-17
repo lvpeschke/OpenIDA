@@ -54,12 +54,13 @@ public class OPCreateUserHandler extends HttpServlet {
 			throws IOException {
 
 		String userName = request.getParameter("user");
-		System.out.println("user :" + userName);
+		System.out.println("user : " + userName);
 		String password = request.getParameter("pwd");
-		System.out.println("pwd :" + password);
+		System.out.println("pwd : " + password);
 		String positions = request.getParameter("positions"); // not yet in the right format
-		System.out.println("pos :" + positions);
+		System.out.println("pos : " + positions);
 		String[] colors = request.getParameterValues("color"); // not yet in the right format
+		System.out.println("colors : " + colors.toString());
 
 		if (validateAttempt(password, positions, colors)) {
 			// save user to the DB
@@ -125,9 +126,10 @@ public class OPCreateUserHandler extends HttpServlet {
 	 */
 	// added
 	private boolean checkPositions(String positions) {
+		int numberOfDigits = countDifferentDigitsInString(positions);
 		return checkIfNumber(positions) &&
-			   (countDifferentLettersInString(positions) > 2) &&
-			   (countDifferentLettersInString(positions) < 8);
+			   (numberOfDigits > 2) &&
+			   (numberOfDigits < 8);
 	}
 
 	/**
@@ -146,10 +148,10 @@ public class OPCreateUserHandler extends HttpServlet {
 
 	// Static methods
 	/**
-	 * Count the number of different characters in a string
+	 * Count the number of different letter characters in a string
 	 * 
 	 * @param input
-	 * @return -1 if input contains no-letter-characters or the number of different letters
+	 * @return -1 if input contains no-letter-characters, otherwise the number of different letters
 	 */
 	// added
 	private static int countDifferentLettersInString(String input) {
@@ -158,7 +160,24 @@ public class OPCreateUserHandler extends HttpServlet {
 		for (int i = 0; i < input.length(); i++) {
 			char temp = input.charAt(i);
 			// return immediately if not a letter
-			if (Character.isLetter(temp)) {
+			if (!Character.isLetter(temp)) {
+				return -1;
+			}
+			// add the letter to the counter
+			if (!counter.contains(temp)) {
+				counter.add(temp);
+			}
+		}
+		return counter.size();
+	}
+	
+	private static int countDifferentDigitsInString(String input) {
+		ArrayList<Character> counter = new ArrayList<Character>();
+
+		for (int i = 0; i < input.length(); i++) {
+			char temp = input.charAt(i);
+			// return immediately if not a digit
+			if (!Character.isDigit(temp)) {
 				return -1;
 			}
 			// add the letter to the counter
@@ -179,9 +198,11 @@ public class OPCreateUserHandler extends HttpServlet {
 	private static boolean checkIfNumber(String input) {
 		try {
 			if (Integer.parseInt(input) < 0) {
+				System.out.println("checkIfNumber : negative int");
 				return false;
 			}
 		} catch (NumberFormatException e) {
+			System.out.println("checkIfNumber : not an int");
 			return false;
 		}
 		return true;

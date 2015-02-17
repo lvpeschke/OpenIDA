@@ -35,26 +35,22 @@ public class OPChallengeGenerator extends HttpServlet {
 		drawer = new Drawer();
 	}
 
-	// used when the server sends the challenge to the browser (get-response)
+	// used when the server sends the challenge to the browser (generates the get-response)
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		System.out.println("doGet in ChallengeGenerator invoked!!!");
 
 		Challenge c = new Challenge();
-
-		//String username = request.getPathInfo();
-		//String requestString = request.toString();
-		//String username = request.getParameter("user");
-		//System.out.println("in request user is: " + username);
-		//System.out.println("the request is: " + requestString);
 		
 		putExpectedAnswerIntoDB(c, receivedUserName);
+		
+		// reset the user name
 		receivedUserName = null;
 
 		setResponse(response, c);
 	}
 	
-	// used when the browser posts the username
+	// used when the browser posts the username (handles the post-message)
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		System.out.println("doPost in ChallengeGenerator invoked!!!");
@@ -94,7 +90,7 @@ public class OPChallengeGenerator extends HttpServlet {
 			System.out.println("answer: " + answer);
 			dbConnection.saveExpectedAnswerOfUser(username, answer.toUpperCase());
 		} catch (UserNotFoundException e) {
-			System.out.println("exception: " + e.getMessage());
+			System.err.println("The following user was not found: " + e.getMessage());
 			// do nothing
 		}
 	}

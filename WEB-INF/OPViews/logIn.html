@@ -46,11 +46,13 @@
 				</form>
         	</div><br>
         	<div class="middleWrapper">
-				<form action="/OpenIdProvider/OpCreateUser/">
+				<form id="form-create" action="/OpenIdProvider/OpCreateUser/">
 					<legend>Create Account</legend>
-                    <p><img src="../img/SignupMatrix.png" alt="Signup matrix"></p>
+                    <div id="create-guide">Enter a username, 3-7 matrix positions (digits as defined below), 
+                        2-4 colours, and a password (max. 12 letters, min. 4 different letters).</div><br>
         			<p><input type="text" name="user" value="" placeholder="Username"></p>
-                    <p><input type="text" name="positions" value="" placeholder="Matrix positions"></p>
+                    <p><img src="../img/SignupMatrix.png" alt="Signup matrix">
+                       <input type="text" name="positions" value="" placeholder="Matrix positions"></p>
                     <p><input type="checkbox" name="color" value="0">Black</option>
                        <input type="checkbox" name="color" value="1">Brown</option>
                        <input type="checkbox" name="color" value="2">Blue</option>

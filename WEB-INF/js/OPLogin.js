@@ -20,14 +20,14 @@ $(document).ready(function(){
 	var showNewForm = function(){
 		var usernameValue = $('#username-login').val();
 
-		$('<form id="form-login2" action="/OpenIdProvider/OpLogin/"><legend>Login</legend></form>').insertAfter($('#form-login'));
+		$('<form id="form-login2" action="/OpenIdProvider/OpLogin/"><legend>Login</legend><div id="login-guide">Detect the letters either contained in your password, or of one of your colours, or located in one of your matrix positions. Enter them in the answer field in the order defined in the matrix shown in the Create Account section.</div><br></form>').insertAfter($('#form-login'));
 
 		$('#form-login2').append($('<img src="http://localhost:8054/OpenIdProvider/OPChallenge/"' + usernameValue + ' >'));
 
         $('#form-login2').append($('<input id="username-login2" type="hidden" name="user-login2">'));
         $('#username-login2').val(usernameValue);
 		$('#form-login2').append($('<input id="answer" type="password" name="answer" placeholder="Answer">'));
-		$('#form-login2').append($('<input id="submit-form-login2" type="submit" value="Submit">'));
+		$('#form-login2').append($('<br><br><input id="submit-form-login2" type="submit" value="Submit">'));
 
 		$('#form-login2').submit(function(event){ 
 			$.ajax({

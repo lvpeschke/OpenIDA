@@ -148,7 +148,7 @@ public class OPCreateUserHandler extends HttpServlet {
 
 	// Static methods
 	/**
-	 * Count the number of different letter characters in a string
+	 * Count the number of different letter characters in a String
 	 * 
 	 * @param input
 	 * @return -1 if input contains no-letter-characters, otherwise the number of different letters
@@ -171,6 +171,12 @@ public class OPCreateUserHandler extends HttpServlet {
 		return counter.size();
 	}
 	
+	/**
+	 * Count the number of different digits in a String
+	 * 
+	 * @param input
+	 * @return -1 if input contains no-digit-characters, otherwise the number of different digits
+	 */
 	private static int countDifferentDigitsInString(String input) {
 		ArrayList<Character> counter = new ArrayList<Character>();
 
@@ -208,26 +214,6 @@ public class OPCreateUserHandler extends HttpServlet {
 		return true;
 	}
 
-	/*
-	private static byte[] extractPositionsFromString(String input) {
-		byte[] positionsInBytes = { 0, 0, 0 };
-
-		// discards leading + if there is one
-		if (input.charAt(0) == '+') {
-			input = input.substring(1);
-		}
-
-		for (int i = 0; i < input.length(); i++) {
-			int number = Integer.parseInt("" + input.charAt(i));
-			number--;
-			int row = (int) number / 3;
-			int column = number % 3;
-			positionsInBytes[row] += 2 ^ column;
-		}
-		return positionsInBytes;
-	}
-	*/
-
 	/**
 	 * Extracts the selected matrix positions from a String and converts them to int
 	 * 
@@ -237,35 +223,23 @@ public class OPCreateUserHandler extends HttpServlet {
 	// TODO check math
 	// added
 	private static int extractPositionsFromStringToInt(String input) {
-
-		int positionsInInt = 0;
+		int positions = 0;
 		
 		// discards leading + if there is one
 		if (input.charAt(0) == '+') {
 			input = input.substring(1);
+			System.err.println("There was a '+'-sign in the chosen matrix positions at user creation.");
 		}
 
 		// input contains a number, checked in checkIfNumber
 		for (int i = 0; i < input.length(); i++) {
-			int number = Integer.parseInt("" + input.charAt(i));
+			int number = Integer.parseInt("" + input.charAt(i)); // dangerous!!
 			number--;
-			positionsInInt += ((int) Math.pow(2.0, number));
+			positions += ((int) Math.pow(2.0, number));
 		}
-		System.out.println("final positions: " + positionsInInt);
-		return positionsInInt;
+		System.out.println("final positions: " + positions);
+		return positions;
 	}
-
-	/*
-	private static byte extractColorsFromStringArray(String[] input) {
-		byte colors = 0;
-		for (int i = 0; i < input.length; i++) {
-			int colorInt = Integer.parseInt(input[i]);
-			colors += Math.pow(2, colorInt); // dangerous!!
-		}
-		System.out.println("final color: " + colors);
-		return colors;
-	}
-	*/
 
 	/**
 	 * Extracts the selected colors from a String[] and converts them to int
@@ -278,7 +252,7 @@ public class OPCreateUserHandler extends HttpServlet {
 	private static int extractColorsFromStringArrayToInt(String[] input) {
 		int colors = 0;
 		for (int i = 0; i < input.length; i++) {
-			int colorInt = Integer.parseInt(input[i]); // dangerous!! check html code
+			int colorInt = Integer.parseInt(input[i]); // dangerous!!
 			colors += ((int) Math.pow(2.0, colorInt));
 		}
 		System.out.println("final color: " + colors);

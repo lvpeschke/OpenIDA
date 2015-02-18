@@ -90,7 +90,7 @@ public class OPChallengeGenerator extends HttpServlet {
 			System.out.println("answer: " + answer);
 			dbConnection.saveExpectedAnswerOfUser(username, answer.toUpperCase());
 		} catch (UserNotFoundException e) {
-			System.err.println("The following user was not found: " + e.getMessage());
+			System.err.println("The following user was not found: " + username);
 			// do nothing
 		}
 	}

@@ -57,7 +57,7 @@ public class OPCreateUserHandler extends HttpServlet {
 		System.out.println("user : " + userName);
 		String password = request.getParameter("pwd");
 		System.out.println("pwd : " + password);
-		String positions = request.getParameter("positions"); // not yet in the right format
+		String positions = discardNonDigits(request.getParameter("positions")); // discard all non digits
 		System.out.println("pos : " + positions);
 		String[] colors = request.getParameterValues("color"); // not yet in the right format
 		System.out.println("colors : " + colors.toString());
@@ -126,10 +126,7 @@ public class OPCreateUserHandler extends HttpServlet {
 	 */
 	// added
 	private boolean checkPositions(String positions) {
-		// delete everything that is not a number
-		String digits = discardNonDigits(positions);
-		// actual check
-		int numberOfDigits = countDifferentDigitsInString(digits);
+		int numberOfDigits = countDifferentDigitsInString(positions);
 		return (numberOfDigits > 2) &&
 			   (numberOfDigits < 8);
 	}
@@ -156,7 +153,9 @@ public class OPCreateUserHandler extends HttpServlet {
 	 * @return
 	 */
 	private static String discardNonDigits(String input) {
+		System.out.println("discard non digits gives..... " + input.replaceAll("[^\\d]", ""));
 		return input.replaceAll("[^\\d]", "");
+		
 	}
 	
 	/**
@@ -187,7 +186,7 @@ public class OPCreateUserHandler extends HttpServlet {
 	 * Count the number of different digits in a String
 	 * 
 	 * @param input
-	 * @return -1 if input contains no-digit-characters, otherwise the number of different digits
+	 * @return -1 if input contains no-digit-characters or a 0, otherwise the number of different digits
 	 */
 	// added
 	private static int countDifferentDigitsInString(String input) {
@@ -196,7 +195,8 @@ public class OPCreateUserHandler extends HttpServlet {
 		for (int i = 0; i < input.length(); i++) {
 			char temp = input.charAt(i);
 			// return immediately if not a digit
-			if (!Character.isDigit(temp)) {
+			if ((!Character.isDigit(temp)) || (temp == '0')) {
+				System.out.println("illegal char in positions: " + temp);
 				return -1;
 			}
 			// add the letter to the counter

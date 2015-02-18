@@ -126,9 +126,11 @@ public class OPCreateUserHandler extends HttpServlet {
 	 */
 	// added
 	private boolean checkPositions(String positions) {
-		int numberOfDigits = countDifferentDigitsInString(positions);
-		return checkIfNumber(positions) &&
-			   (numberOfDigits > 2) &&
+		// delete everything that is not a number
+		String digits = discardNonDigits(positions);
+		// actual check
+		int numberOfDigits = countDifferentDigitsInString(digits);
+		return (numberOfDigits > 2) &&
 			   (numberOfDigits < 8);
 	}
 
@@ -147,6 +149,16 @@ public class OPCreateUserHandler extends HttpServlet {
 	}
 
 	// Static methods
+	/**
+	 * Returns the substring only containing the characters 0-9
+	 * 
+	 * @param input
+	 * @return
+	 */
+	private static String discardNonDigits(String input) {
+		return input.replaceAll("[^\\d]", "");
+	}
+	
 	/**
 	 * Count the number of different letter characters in a String
 	 * 
@@ -177,6 +189,7 @@ public class OPCreateUserHandler extends HttpServlet {
 	 * @param input
 	 * @return -1 if input contains no-digit-characters, otherwise the number of different digits
 	 */
+	// added
 	private static int countDifferentDigitsInString(String input) {
 		ArrayList<Character> counter = new ArrayList<Character>();
 
@@ -192,26 +205,6 @@ public class OPCreateUserHandler extends HttpServlet {
 			}
 		}
 		return counter.size();
-	}
-
-	/**
-	 * Checks if a String is an integer number
-	 * 
-	 * @param input
-	 * @return
-	 */
-	// added
-	private static boolean checkIfNumber(String input) {
-		try {
-			if (Integer.parseInt(input) < 0) {
-				System.out.println("checkIfNumber : negative int");
-				return false;
-			}
-		} catch (NumberFormatException e) {
-			System.out.println("checkIfNumber : not an int");
-			return false;
-		}
-		return true;
 	}
 
 	/**

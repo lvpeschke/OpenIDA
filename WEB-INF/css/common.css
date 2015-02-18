@@ -3,6 +3,11 @@
 	text-align: center;
 }
 
+.leftWrapper{
+    margin: 0 auto;
+    text-align: left;
+}
+
 .mainDiv{
 	margin-top: 100px;
 }

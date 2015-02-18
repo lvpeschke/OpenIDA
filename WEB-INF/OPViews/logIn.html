@@ -34,7 +34,29 @@
 	<div class="container-fixed row-fixed mainDiv">
 
 		<div class="col-md-4 col-md-offset-1 contentDiv">
-        <img src="../img/OPintro.png">
+            <img src="../img/OPintro.png">
+            <div class="leftWrapper"><h3>How to</h3>
+                <legend>Create an account</legend>
+                <dl>
+                    <dt>Username
+                        <dd>Letters only, case sensitive.
+                    <dt>Matrix positions
+                        <dd>Enter 3 to 7 different digits representing the positions as defined in the numbered matrix.
+                    <dt>Colours
+                        <dd>Choose 2 to 4 colours.
+                    <dt>Password
+                        <dd>Letters only, not case sensitive. Maximum 12 letters with at least 4 different letter.
+                </dl>
+                <legend>Login</legend>
+                After submitting your login, you are presented with a challenge matrix.<br>
+                Detect the letters 
+                <ul>
+                    <li>contained in your password,
+                    <li>of one of your colours, 
+                    <li>located in one of your matrix positions.
+                </ul>
+                Enter them in the answer field in order (as defined in the numbered matrix). Not case sensitive.
+            </div>
 		</div>
 
 		<div class="col-md-4 col-md-offset-1 contentDiv">
@@ -48,8 +70,6 @@
         	<div class="middleWrapper">
 				<form id="form-create" action="/OpenIdProvider/OpCreateUser/">
 					<legend>Create Account</legend>
-                    <div id="create-guide">Enter a username, 3-7 matrix positions (digits as defined below), 
-                        2-4 colours, and a password (max. 12 letters, min. 4 different letters).</div><br>
         			<p><input type="text" name="user" value="" placeholder="Username"></p>
                     <p><img src="../img/SignupMatrix.png" alt="Signup matrix">
                        <input type="text" name="positions" value="" placeholder="Matrix positions"></p>

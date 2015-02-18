@@ -30,13 +30,11 @@ public class OPCreateUserHandler extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("doGet in CreateUser invoked!!!");
 		handlNewUserAttempt(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("doPost in CreateUser invoked!!!");
 		handlNewUserAttempt(request, response);
 	}
 
@@ -54,20 +52,17 @@ public class OPCreateUserHandler extends HttpServlet {
 			throws IOException {
 
 		String userName = request.getParameter("user");
-		System.out.println("user : " + userName);
 		String password = request.getParameter("pwd");
-		System.out.println("pwd : " + password);
 		String positions = discardNonDigits(request.getParameter("positions")); // discard all non digits
-		System.out.println("pos : " + positions);
 		String[] colors = request.getParameterValues("color"); // not yet in the right format
-		System.out.println("colors : " + colors.toString());
 
 		if (validateAttempt(password, positions, colors)) {
 			// save user to the DB
-			System.out.println("handlNewUserAttempt - passed test");
 			int positionsForDB = extractPositionsFromStringToInt(positions);
 			int colorsForDB = extractColorsFromStringArrayToInt(colors);
 			dbConnection.saveNewUser(userName, password, positionsForDB, colorsForDB);
+			System.out.println("New user: username - " + userName + ", pwd - " + password 
+					+ ", positions - " + positionsForDB + ", colours - " + colorsForDB);
 			// log the user in
 			setOPSession(request, userName);
 			// redirect
@@ -153,9 +148,8 @@ public class OPCreateUserHandler extends HttpServlet {
 	 * @return
 	 */
 	private static String discardNonDigits(String input) {
-		System.out.println("discard non digits gives..... " + input.replaceAll("[^\\d]", ""));
+		System.out.println("Discard non digits from matrix positions gives... " + input.replaceAll("[^\\d]", ""));
 		return input.replaceAll("[^\\d]", "");
-		
 	}
 	
 	/**
@@ -196,7 +190,6 @@ public class OPCreateUserHandler extends HttpServlet {
 			char temp = input.charAt(i);
 			// return immediately if not a digit
 			if ((!Character.isDigit(temp)) || (temp == '0')) {
-				System.out.println("illegal char in positions: " + temp);
 				return -1;
 			}
 			// add the letter to the counter
@@ -213,7 +206,6 @@ public class OPCreateUserHandler extends HttpServlet {
 	 * @param input
 	 * @return
 	 */
-	// TODO check math
 	// added
 	private static int extractPositionsFromStringToInt(String input) {
 		int positions = 0;
@@ -230,7 +222,6 @@ public class OPCreateUserHandler extends HttpServlet {
 			number--;
 			positions += ((int) Math.pow(2.0, number));
 		}
-		System.out.println("final positions: " + positions);
 		return positions;
 	}
 
@@ -240,7 +231,6 @@ public class OPCreateUserHandler extends HttpServlet {
 	 * @param input
 	 * @return
 	 */
-	// TODO check math
 	// added
 	private static int extractColorsFromStringArrayToInt(String[] input) {
 		int colors = 0;
@@ -248,7 +238,6 @@ public class OPCreateUserHandler extends HttpServlet {
 			int colorInt = Integer.parseInt(input[i]); // dangerous!!
 			colors += ((int) Math.pow(2.0, colorInt));
 		}
-		System.out.println("final color: " + colors);
 		return colors;
 	}
 }

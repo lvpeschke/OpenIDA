@@ -99,7 +99,7 @@ public class OPdbConnection {
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out.println("OPdbConnection - ERROR: problem saving the AuthenticationRequest");
+			System.err.println("OPdbConnection - ERROR: problem saving the AuthenticationRequest");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -110,7 +110,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.err.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 			}
 		}
@@ -136,7 +136,7 @@ public class OPdbConnection {
 			pst.setString(i++, nonce);
 			rs = pst.executeQuery();
 		} catch (SQLException e) {
-			System.out.println("OPdbConnection - ERROR: problem checking if AuthenticationRequest is in db");
+			System.err.println("OPdbConnection - ERROR: problem checking if AuthenticationRequest is in db");
 			e.printStackTrace();
 			return false;
 		} finally {
@@ -148,7 +148,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.err.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 				return false;
 			}
@@ -158,15 +158,15 @@ public class OPdbConnection {
 			if (rs.next()) {
 				count = rs.getInt(1);
 			} else {
-				System.out.println("OPdbConnection - ERROR: No such AuthenticationRequest");
+				System.err.println("OPdbConnection - ERROR: No such AuthenticationRequest");
 				return false;
 			}
 			if (count != 1) {
-				System.out.println("OPdbConnection - ERROR: Strange amount of AuthenticationRequest");
+				System.err.println("OPdbConnection - ERROR: Strange amount of AuthenticationRequest");
 				return false;
 			}
 		} catch (SQLException e) {
-			System.out.println("OPdbConnection - ERROR: Problem counting the responses");
+			System.err.println("OPdbConnection - ERROR: Problem counting the responses");
 			e.printStackTrace();
 			return false;
 		}
@@ -199,7 +199,7 @@ public class OPdbConnection {
 			pst.setString(i++, answer); // TODO careful with the order of the letters
 			rs = pst.executeQuery();
 		} catch (SQLException e) {
-			System.out.println("OPdbConnection - ERROR: problem checking if User is in db");
+			System.err.println("OPdbConnection - ERROR: problem checking if User is in db");
 			e.printStackTrace();
 			return false;
 		}
@@ -208,15 +208,15 @@ public class OPdbConnection {
 			if (rs.next()) {
 				count = rs.getInt(1);
 			} else {
-				System.out.println("OPdbConnection - ERROR: No such User");
+				System.err.println("OPdbConnection - ERROR: No such User");
 				return false;
 			}
 			if (count < 1) {
-				System.out.println("OPdbConnection - ERROR: Still no user");
+				System.err.println("OPdbConnection - ERROR: Still no user");
 				return false;
 			}
 		} catch (SQLException e) {
-			System.out.println("OPdbConnection - ERROR: Problem counting the responses from usertable");
+			System.err.println("OPdbConnection - ERROR: Problem counting the responses from usertable");
 			e.printStackTrace();
 			return false;
 		} finally {
@@ -231,7 +231,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.err.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 				return false;
 			}
@@ -265,7 +265,7 @@ public class OPdbConnection {
 			rs = pst.executeQuery();
 			req = getSpecificAuthRequest(rs);
 		} catch (SQLException ex) {
-			System.out.println("OPdbConnection - ERROR: Selecting a specific AuthenticationRequest statement error");
+			System.err.println("OPdbConnection - ERROR: Selecting a specific AuthenticationRequest statement error");
 			ex.printStackTrace();
 			return null;
 		} finally {
@@ -283,7 +283,7 @@ public class OPdbConnection {
 	 */
 	private AuthenticationRequest getSpecificAuthRequest(ResultSet rs) {
 		if (rs == null) {
-			System.out.println("OPdbConnection - ERROR: Specific AuthenticationRequest RS is null");
+			System.err.println("OPdbConnection - ERROR: Specific AuthenticationRequest RS is null");
 			return null;
 		}
 		int a = 0;
@@ -294,12 +294,12 @@ public class OPdbConnection {
 				a++;
 			}
 		} catch (SQLException e) {
-			System.out.println("OPdbConnection - ERROR: Problem reading response");
+			System.err.println("OPdbConnection - ERROR: Problem reading response");
 			e.printStackTrace();
 			return null;
 		}
 		if (a != 1) {
-			System.out.println("OPdbConnection - ERROR: Strange ammount of that AuthenticationRequest in DB->"
+			System.err.println("OPdbConnection - ERROR: Strange ammount of that AuthenticationRequest in DB->"
 							+ a);
 			return null;
 		}
@@ -332,7 +332,7 @@ public class OPdbConnection {
 		try {
 			req = AuthenticationRequest.parse(hashMap);
 		} catch (ParseException e) {
-			System.out.println("OPdbConnection - ERROR: Could not create a AuthenticationRequest form the parameters");
+			System.err.println("OPdbConnection - ERROR: Could not create a AuthenticationRequest form the parameters");
 			e.printStackTrace();
 		}
 		return req;
@@ -358,7 +358,7 @@ public class OPdbConnection {
 			pst.setString(i++, id);
 			rs = pst.executeQuery();
 		} catch (SQLException e) {
-			System.out.println("OPdbConnection - ERROR: problem checking if clientid is in db");
+			System.err.println("OPdbConnection - ERROR: problem checking if clientid is in db");
 			e.printStackTrace();
 			return false;
 		}
@@ -367,15 +367,15 @@ public class OPdbConnection {
 			if (rs.next()) {
 				count = rs.getInt(1);
 			} else {
-				System.out.println("OPdbConnection - ERROR: No such clientid");
+				System.err.println("OPdbConnection - ERROR: No such clientid");
 				return false;
 			}
 			if (count < 1) {
-				System.out.println("OPdbConnection - ERROR: No such clientid");
+				System.err.println("OPdbConnection - ERROR: No such clientid");
 				return false;
 			}
 		} catch (SQLException e) {
-			System.out.println("OPdbConnection - ERROR: Problem counting the responses");
+			System.err.println("OPdbConnection - ERROR: Problem counting the responses");
 			e.printStackTrace();
 			return false;
 		} finally {
@@ -390,12 +390,11 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.err.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 				return false;
 			}
 		}
-		System.out.println("validateCLientID found in DB, valid request");
 		return true;
 	}
 
@@ -420,7 +419,7 @@ public class OPdbConnection {
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out.println("OPdbConnection - ERROR: problem loging out the user");
+			System.err.println("OPdbConnection - ERROR: problem loging out the user");
 			e.printStackTrace();
 			return false;
 		} finally {
@@ -432,7 +431,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.err.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 				return false;
 			}
@@ -460,7 +459,7 @@ public class OPdbConnection {
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out.println("OPdbConnection - ERROR: problem saving the SessionId");
+			System.err.println("OPdbConnection - ERROR: problem saving the SessionId");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -471,7 +470,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.err.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 			}
 		}
@@ -500,7 +499,7 @@ public class OPdbConnection {
 			rs = pst.executeQuery();
 			isLoggedIn = checkIfUserIsLoggedIn(rs);
 		} catch (SQLException ex) {
-			System.out.println("OPdbConnection - ERROR: Select statement error");
+			System.err.println("OPdbConnection - ERROR: Select statement error");
 			ex.printStackTrace();
 			return false;
 		} finally {
@@ -515,7 +514,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.err.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 				return false;
 			}
@@ -536,7 +535,7 @@ public class OPdbConnection {
 			rs.next();
 			rowCount = rs.getInt(1);
 		} catch (SQLException e) {
-			System.out.println("OPdbConnection - ERROR: Problem checking logged in user");
+			System.err.println("OPdbConnection - ERROR: Problem checking logged in user");
 			e.printStackTrace();
 			return false;
 		}
@@ -567,7 +566,7 @@ public class OPdbConnection {
 			putDefaultUserInTable();
 			createLoggedInTable();
 		} catch (ClassNotFoundException e) {
-			System.out.println("OPdbConnection - ERROR: No such class exists");
+			System.err.println("OPdbConnection - ERROR: No such class exists");
 			e.printStackTrace();
 		}
 	}
@@ -767,7 +766,7 @@ public class OPdbConnection {
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out.println("OPdbConnection - ERROR: problem saving the ClientID - Probably already exists");
+			System.err.println("OPdbConnection - ERROR: problem saving the ClientID - Probably already exists");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -778,7 +777,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.err.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 			}
 		}
@@ -865,7 +864,7 @@ public class OPdbConnection {
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out.println("OPdbConnection - ERROR: problem saving the User - Probably already exists");
+			System.err.println("OPdbConnection - ERROR: problem saving the User - Probably already exists");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -876,7 +875,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.err.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 			}
 		}
@@ -909,7 +908,7 @@ public class OPdbConnection {
 			}
 
 		} catch (SQLException ex) {
-			System.out.println("OPdbConnection - ERROR: Select statement error");
+			System.err.println("OPdbConnection - ERROR: Select statement error");
 			ex.printStackTrace();
 			return null;
 		} finally {
@@ -943,7 +942,7 @@ public class OPdbConnection {
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out.println("OPdbConnection - ERROR: problem saving the Picture");
+			System.err.println("OPdbConnection - ERROR: problem saving the Picture");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -954,8 +953,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out
-						.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.err.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 			}
 		}
@@ -998,11 +996,9 @@ public class OPdbConnection {
 			} else {
 				throw new UserNotFoundException(username);
 			}
-			System.out.println("positions: " + positions);
-			System.out.println("colors: " + colors);
-
+			
 		} catch (SQLException ex) {
-			System.out.println("OPdbConnection - ERROR: Select statement error");
+			System.err.println("OPdbConnection - ERROR: Select statement error");
 			ex.printStackTrace();
 		} finally {
 			closeConnection(rs, pst, connection);
@@ -1019,8 +1015,6 @@ public class OPdbConnection {
 	 */
 	// added
 	public void saveExpectedAnswerOfUser(String username, String answer) {
-		System.out.println("saveExpectedAnswerOfUser invoked for user - answer: " + username + " - " + answer);
-		
 		if (username == null) {
 			return;
 		}
@@ -1038,7 +1032,7 @@ public class OPdbConnection {
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out.println("OPdbConnection - ERROR: problem saving the expected answer");
+			System.err.println("OPdbConnection - ERROR: problem saving the expected answer");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -1049,7 +1043,7 @@ public class OPdbConnection {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+				System.err.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 				ex.printStackTrace();
 			}
 		}
@@ -1062,7 +1056,7 @@ public class OPdbConnection {
 	 */
 	// added
 	public void deleteExpectedAnswer(String username) {
-		System.out.println("saveExpectedAnswerOfUser invoked for user: " + username);
+		System.out.println("Resetting expected answer for user " + username);
 		saveExpectedAnswerOfUser(username, null);
 	}
 
@@ -1086,8 +1080,7 @@ public class OPdbConnection {
 				connection.close();
 			}
 		} catch (SQLException ex) {
-			System.out
-					.println("OPdbConnection - ERROR: Problem closing the connection to the database");
+			System.err.println("OPdbConnection - ERROR: Problem closing the connection to the database");
 			ex.printStackTrace();
 		}
 	}

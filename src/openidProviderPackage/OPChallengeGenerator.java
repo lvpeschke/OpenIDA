@@ -23,7 +23,7 @@ public class OPChallengeGenerator extends HttpServlet {
 	private OPdbConnection dbConnection;
 	private Drawer drawer;
 	
-	// make username globally available
+	// make username globally available for GET and POST
 	private String receivedUserName = null;
 
 	/**
@@ -38,26 +38,21 @@ public class OPChallengeGenerator extends HttpServlet {
 	// used when the server sends the challenge to the browser (generates the get-response)
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("doGet in ChallengeGenerator invoked!!!");
-
-		Challenge c = new Challenge();
-		
-		putExpectedAnswerIntoDB(c, receivedUserName);
-		
+		// generate new challenge
+		Challenge c = new Challenge();		
+		// remember the answer to the challenge for the user
+		putExpectedAnswerIntoDB(c, receivedUserName);		
 		// reset the user name
 		receivedUserName = null;
-
+		// send the challenge
 		setResponse(response, c);
 	}
 	
 	// used when the browser posts the username (handles the post-message)
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("doPost in ChallengeGenerator invoked!!!");
 		
 		String username = request.getParameter("user-login");
-		System.out.println("in request user is: " + username);
-		
 		// set the username to make it accessible globally
 		receivedUserName = username;
 	}
@@ -71,7 +66,7 @@ public class OPChallengeGenerator extends HttpServlet {
 	 * @throws IOException
 	 */
 	private void setResponse(HttpServletResponse response, Challenge c) throws IOException {
-		System.out.println("setResponse invoked");
+		System.out.println("Sending a new challenge...");
 		response.setContentType("image/jpeg");
 		ImageIO.write(drawer.drawChallengeImage(c), "jpg", response.getOutputStream());
 	}
@@ -83,15 +78,13 @@ public class OPChallengeGenerator extends HttpServlet {
 	 * @param username
 	 */
 	private void putExpectedAnswerIntoDB(Challenge c, String username) {
-		System.out.println("putExpectedAnswerIntoDB invoked, answer should follow");
 		try {
 			User user = dbConnection.getUserInfo(username);
 			String answer = c.resolveFor(user);
-			System.out.println("answer: " + answer);
 			dbConnection.saveExpectedAnswerOfUser(username, answer.toUpperCase());
+			System.out.println("Expected answer for user "+ username + " --> " + answer);
 		} catch (UserNotFoundException e) {
-			System.err.println("The following user was not found: " + username);
-			// do nothing
+			System.err.println("The following user was not found in the DB: " + username);
 		}
 	}
 }

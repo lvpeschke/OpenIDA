@@ -50,13 +50,11 @@ public class OPRespondAuthentication extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("doGet in OPRespondAuthentication invoked!!!");
 		createAuthenticationSuccessResponse(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("doPost in OPRespondAuthentication invoked!!!");
 		createAuthenticationSuccessResponse(request, response);
 	}
 
@@ -177,8 +175,7 @@ public class OPRespondAuthentication extends HttpServlet {
 		jwtClaims.setIssuer(issuerName);
 		jwtClaims.setSubject(userName);
 		List<String> aud = new ArrayList<>();
-		System.out.println(req.getClientID().toString()); //TODO
-		aud.add(req.getClientID().toString());
+		aud.add(req.getClientID().toString()); // TODO there is a problem here
 		jwtClaims.setAudience(aud);
 		jwtClaims.setExpirationTime(new Date(
 				new Date().getTime() + 1000 * 60 * 10));

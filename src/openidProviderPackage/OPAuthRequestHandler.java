@@ -32,13 +32,11 @@ public class OPAuthRequestHandler extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("doGet in OPAuthRequest invoked!!!");
 		handleNewAuthRequest(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("doPost in OpAuthRequest invoked!!!");
 		handleNewAuthRequest(request, response);
 	}
 
@@ -61,15 +59,14 @@ public class OPAuthRequestHandler extends HttpServlet {
 		try {
 			req = AuthenticationRequest.parse(params);
 		} catch (ParseException e) {
-			System.out.println("Error parsing request");
+			System.err.println("Error parsing request");
 			e.printStackTrace();
 		}
 
 		if (validateAuthenticatonRequest(req)) {
 			saveRequest(req);
 		} else {
-			System.out
-					.println("The request is either invalid or is not a correct request");
+			System.err.println("The request is either invalid or is not a correct request");
 		}
 
 	}
@@ -111,7 +108,6 @@ public class OPAuthRequestHandler extends HttpServlet {
 	 * @return
 	 */
 	private boolean validateAuthenticatonRequest(AuthenticationRequest req) {
-		System.out.println("validateAuthenticatonRequest invoked");
 		boolean isValid = false;
 		String responseType = req.getResponseType().toString();
 

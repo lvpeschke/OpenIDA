@@ -960,7 +960,7 @@ public class OPdbConnection {
 	}
 
 	/**
-	 * Returns a the user information as a User object.
+	 * Returns the user information as a User object.
 	 * 
 	 * @param username
 	 * @return

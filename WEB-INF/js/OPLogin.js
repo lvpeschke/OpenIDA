@@ -31,13 +31,8 @@ $(document).ready(function(){
 
 		$('#form-login2').submit(function(event){ 
 			$.ajax({
-				url: this.action, //'http://localhost:8054/OpenIdProvider/OpLogin/',
-				//type: this.type,
-                //contentType: 'application/json',
-				data: $(this).serialize(),/*{
-					username: usernameValue,
-					answer: $('#answer').val(),
-				},*/
+				url: this.action,
+				data: $(this).serialize(),
 				success: function(res){
 					window.location.href = res.redirect;
 				}

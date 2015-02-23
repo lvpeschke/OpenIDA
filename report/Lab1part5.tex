@@ -70,7 +70,7 @@ Lab 1: Authentication with OpenID\\
 Lab assistant: Ulf Kargén\\[10pt]}
 
 Guillaume Lambert (guila302) and Lena Peschke (lenpe782)\\
-version 1, 20-02-27
+version 1, 15-02-23
 \end{center}
 
 \hrulefill
@@ -84,7 +84,7 @@ version 1, 20-02-27
 \paragraph{Description}
 % design choices
 
-Our authentication method is challenge-response. It is based on a choice of matrix positions, colours and a password made at the registration.
+Our authentication method is a challenge-response. It is based on a choice of matrix positions, colours and a password made at the registration.
 These choices determine the answer to the challenges that are sent by the server to the user.
 
 More concretely the challenge consists of a randomly generated $3\times3$-matrix in which each of the 9 positions may contain a different letter and colour.
@@ -137,7 +137,7 @@ When presented with a randomly generated challenge as presented in Figure~\ref{f
 \caption{Attack tree of our own authentication method.}
 \label{fig:attacktree}
 \end{figure}
-We used the labels \textcolor{ForestGreen}{Possible} and \textcolor{BrickRed}{Impossible}, making the assumption that the chat RP, the OpenID OP and the users are on separate machines and servers. We did not use cost or probability estimates, because these would highly depend on the actual use of the system.
+We used the labels \textcolor{ForestGreen}{Possible} and \textcolor{BrickRed}{Impossible}, making the assumption that the chat RP, the OpenID OP and the users are on separate machines and servers. We did not use cost or probability estimates because these would highly depend on the actual use of the system.
 The tree contains the major threats we were able to identify for the system. We divided them into two main categories: getting a login or cracking the system.
 Two particular items need some explanation.
 \begin{itemize}
@@ -157,11 +157,13 @@ If the intruder has access to the challenge, which is sent as a picture from the
 
 The security provided through the storage at a the server side is comparable to passwords, as the secret also has to be stored in a database.
 
-Number of possible secrets:
-$$ \sum\limits_{p=3}^{7}{9 \choose p} +  \sum\limits_{c=2}^{4}{6 \choose c} + \sum\limits_{l=4}^{12}{26 \choose k} = 646 406 904 000 \approx 6.5\e{11}$$
+It is also possible to compute the number of different secrets that can be put together:
+$$ \sum\limits_{p=3}^{7}{9 \choose p} \times  \sum\limits_{c=2}^{4}{6 \choose c} \times \sum\limits_{l=4}^{12}{26 \choose l} = 646 406 904 000 \approx 6.5\e{11} \text{,}$$
+where $p$ stands for the positions in the matrix, $c$ for the colours, and $l$ for the letters in the password.
 
-Number of possible challenge matrices:\todo{CHECK MATH!!!}
-$$ 2 \times {6 \choose 1} \times {26 \choose 1} \times \sum\limits_{p=3}^{6}\left[{p\times {9 \choose p}}\right] = 589680 \approx 5.9\e{5}$$
+
+%Number of possible challenge matrices:\todo{CHECK MATH!!!}
+%$$ 2 \times {6 \choose 1} \times {26 \choose 1} \times \sum\limits_{p=3}^{6}\left[{p\times {9 \choose p}}\right] = 589680 \approx 5.9\e{5}$$
 
 \paragraph{Use-case diagram} The use case diagram of our authentication mechanism, represented in Figure~\ref{fig:usecasedia}, depicts the interactions between the user and the system. It does not take the OpenID mechanism into account and only deals with plain authentication, thus not representing further functionalities.
 \begin{figure}
@@ -184,7 +186,7 @@ $$ 2 \times {6 \choose 1} \times {26 \choose 1} \times \sum\limits_{p=3}^{6}\lef
 
 \subsection*{Implementation of an authentication method}
 \paragraph{Overview}
-Our authentication method needs changes in nearly every aspect of the code. The biggest difference to a password authentication is that there are 4 exchanged messages between the user and the server instead of 2, as can be seen in the sequence diagramme (Figure~\ref{fig:seqdia}). Previously, the user would send his username and password to the server, which would either grant or refuse access. With our method, the user sends his username, the server generates a challenge, remembers the expected answer and sends out the matrix to the user. The user then sends his answer and username back to the server, which again grants or refuses access. This impacts the database, the interface and the network aspect of the authentication.
+Our authentication method needs changes in nearly every aspect of the code. The biggest difference to a password authentication is that there are 4 exchanged messages between the user and the server instead of 2, as can be seen in the sequence diagram (Figure~\ref{fig:seqdia}). Previously, the user would send his username and password to the server, which would either grant or refuse access. With our method, the user sends his username, the server generates a challenge, remembers the expected answer and sends out the matrix to the user. The user then sends his answer and username back to the server, which again grants or refuses access. This impacts the database, the interface and the network aspect of the authentication.
 
 \paragraph{Database}
 The table \texttt{OPUserTable} needs to be changed in the database.
